@@ -1,1 +1,1 @@
-https://api.binance.com/api/v3
+https://api1.binance.com
