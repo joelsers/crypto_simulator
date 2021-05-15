@@ -1,0 +1,23 @@
+Users
+-----
+id PK FK >- Trades.user_id
+username
+password
+balance
+crypto_id FK >-< Cryptos.id
+trade_id
+
+Cryptos
+-------
+id PK 
+name
+price
+volume
+
+
+Trades
+------
+id PK FK >- Users.trade_id
+crypto_id FK >- Cryptos.id
+user_id 
+
