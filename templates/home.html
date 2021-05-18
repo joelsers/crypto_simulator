@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %} Crypto Sim {% endblock %}
+
+
+
+{% block content %}
+
+{% if not g.user %}
+<a href="/signup">Sign Up</a>
+<a href="/login">Login</a>
+
+{% else %}
+<a href="/users/{{ g.user.id }}">Profile</a>
+<a href="/logout">Logout</a>
+
+{% endif %}
+
+
+
+<ul>
+    {% for crypto in cryptos %}
+    
+    <li class='cryptos'>
+        <a href="/cryptos/{{crypto.id}}"> Symbol : {{crypto.name}} </a>
+            <ul>
+                <li>Price : {{crypto.price}}</li>
+                <li>Volume : {{crypto.volume}}</li> 
+            </ul>
+        
+    </li>
+    
+    {% endfor %}
+    
+</ul>
+
+{% endblock %}

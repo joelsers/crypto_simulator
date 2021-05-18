@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %} Test {% endblock %}
+
+{% block content %}
+<h1>{{user.username}}</h1>
+
+<h1>{{user.crypto[0].name}}</h1>
+
+{% endblock %}

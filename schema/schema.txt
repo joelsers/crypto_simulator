@@ -1,6 +1,7 @@
 Users
 -----
 id PK FK >- Trades.user_id
+email
 username
 password
 balance
