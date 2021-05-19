@@ -41,8 +41,8 @@ class User(db.Model):
         nullable=False,
     )
 
-    balance = db.Column(
-        db.Integer,
+    USDT = db.Column(
+        db.Float,
         nullable=False,
         unique=False,
     )
@@ -52,7 +52,7 @@ class User(db.Model):
     
 
     @classmethod
-    def signup(cls, username, email, password, balance):
+    def signup(cls, username, email, password, USDT):
         """Sign up user.
 
         Hashes password and adds user to system.
@@ -64,7 +64,7 @@ class User(db.Model):
             username=username,
             email=email,
             password=hashed_pwd,
-            balance = balance
+            USDT = USDT
         )
 
         db.session.add(user)

@@ -10,15 +10,24 @@
 
 <h1>Username: {{user.username}}</h1>
 
-<p>Balance: {{user.balance}}</p>
+<p>Value: {{value}}</p>
 <ul>
-
-
-
+    {% for crypto in users_cryptos %}
     
+    <li class='user_cryptos'>
+
+<a href="/cryptos/{{crypto.name}}">Symbol : {{crypto.name}}</a>
+
+        
+            <ul>
+                <li>Price : {{crypto.price}}</li>
+                <li>Amount : {{crypto.amount}}</li>
+            </ul>
+        
+    </li>
+    
+    {% endfor %}
+ 
 </ul>
-<p>{{user.crypto[0].name}}</p>
-<p>{{user.crypto[0].price}}</p>
-<p>{{user.crypto[0].amount}}</p>
 
 {% endblock %}
