@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %} {{crypto.name}} {% endblock %}
+
+{% block content %}
+
+
+
+<h1>{{crypto.name}}</h1>
+
+<p>{{crypto.price}}</p>
+
+<p>{{crypto.volume}}</p>
+
+<form method="POST" id="buy_form">
+    {{ buyform.hidden_tag() }}
+
+    {% for field in buyform if field.widget.input_type != 'hidden' %}
+      {% for error in field.errors %}
+        <span class="text-danger">{{ error }}</span>
+      {% endfor %}
+      {{ field(placeholder=field.label.text, class="form-control") }}
+    {% endfor %}
+
+    <button class="btn btn-success btn-block btn-lg">Buy!</button>
+  </form>
+
+
+
+
+{% endblock %}

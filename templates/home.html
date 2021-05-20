@@ -6,15 +6,7 @@
 
 {% block content %}
 
-{% if not g.user %}
-<a href="/signup">Sign Up</a>
-<a href="/login">Login</a>
 
-{% else %}
-<a href="/user/{{ g.user.id }}">Profile</a>
-<a href="/logout">Logout</a>
-
-{% endif %}
 
 
 

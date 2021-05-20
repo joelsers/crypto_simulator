@@ -181,11 +181,12 @@ def show_user(user_id):
 
     user = User.query.get_or_404(user_id)
 
-    users_cryptos = [crypto for crypto in user.crypto]
+    users_cryptos = [crypto for crypto in user.crypto if crypto.amount > 0 ]
 
     users_cryptos_names = [crypto.name for crypto in users_cryptos]
 
     value = 0
+
 
     for sym in crypto_json:
         crypto_symbol = crypto_json[total]["symbol"]
@@ -207,9 +208,6 @@ def show_user(user_id):
         else:
             total +=1
 
-        
-
-    
 
     if not g.user:
         flash("Access unauthorized.", "danger")
@@ -219,7 +217,7 @@ def show_user(user_id):
 
 
 
-@app.route('/cryptos/<crypto_name>', methods = ['GET', 'POST'])
+@app.route('/cryptos/<crypto_name>', methods = ['GET'])
 def show_crypto(crypto_name):
 
     if not g.user:
@@ -229,24 +227,28 @@ def show_crypto(crypto_name):
     crypto = Crypto.query.filter_by(name = crypto_name).first()
 
 
+    return render_template('crypto.html', crypto = crypto)
+
+
+@app.route('/cryptos/<crypto_name>/buy', methods = ['GET', 'POST'])
+def buy_crypto(crypto_name):
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    crypto = Crypto.query.filter_by(name = crypto_name).first()
+
+    edit_user = User.query.get_or_404(g.user.id)
 
     buyform = BuyForm()
 
-    sellform = SellForm()
-
     if buyform.validate_on_submit():
 
-        bought_crypto = UserCrypto(
-            name = crypto.name,
-            price = crypto.price,
-            amount = buyform.amount.data,
-            user_crypto = g.user.id
-            )
+        total = 0
 
-        db.session.add(bought_crypto)
-        db.session.commit()
-
-        edit_user = User.query.get_or_404(g.user.id)
+        crypto_request = requests.get(f'{BASE_URL}ticker/price')
+        crypto_json = crypto_request.json()
 
         users_cryptos = [crypto for crypto in edit_user.crypto]
 
@@ -254,17 +256,77 @@ def show_crypto(crypto_name):
 
         usdt = users_cryptos_names.index("USDCUSDT")
 
-        edit_user.crypto[usdt].amount -= bought_crypto.price * bought_crypto.amount
+        for sym in crypto_json:
+            crypto_symbol = crypto_json[total]["symbol"]
+            crypto_price = crypto_json[total]["price"]
+            if crypto_symbol in users_cryptos_names:
 
-        db.session.add(edit_user)
-        db.session.commit()
+                edit_crypto = UserCrypto.query.filter_by(name = crypto_symbol).first()
+            
+        
+                edit_crypto.price = crypto_price
 
-        return redirect(f'/user/{g.user.id}')
-    else:
-        return render_template('crypto.html', crypto = crypto, buyform = buyform, sellform = sellform)
 
+                db.session.add(edit_crypto)
+                db.session.commit()
+
+                total+=1
+            else:
+                total +=1
+        
+
+        
+
+        if (buyform.amount.data * crypto.price) < (edit_user.crypto[usdt].amount - 10) and crypto.name not in users_cryptos_names:
+
+            bought_crypto = UserCrypto(
+                name = crypto.name,
+                price = crypto.price,
+                amount = buyform.amount.data,
+                user_crypto = g.user.id
+                )
+
+            db.session.add(bought_crypto)
+            db.session.commit()
+
+
+            edit_user.crypto[usdt].amount -= bought_crypto.price * bought_crypto.amount
+
+            db.session.add(edit_user)
+            db.session.commit()
+
+            return redirect(f'/user/{g.user.id}')
+
+        elif (buyform.amount.data * crypto.price) < (edit_user.crypto[usdt].amount - 10) and crypto.name in users_cryptos_names:
+
+            bought_coin = users_cryptos_names.index(crypto.name)
+
+            edit_user.crypto[bought_coin].amount += buyform.amount.data
+            edit_user.crypto[usdt].amount -= edit_user.crypto[bought_coin].price * buyform.amount.data
+
+            db.session.add(edit_user)
+            db.session.commit()
+
+            return redirect(f'/user/{g.user.id}')
+
+        else:
+                flash("You can't buy that much", "danger")
+                return redirect(f"/cryptos/{crypto.name}/buy")
     
-    
+    return render_template('crypto_buy.html', crypto = crypto, buyform = buyform)
+
+
+@app.route('/cryptos/<crypto_name>/sell', methods = ['GET', 'POST'])
+def sell_crypto(crypto_name):
+
+
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/")
+
+    crypto = Crypto.query.filter_by(name = crypto_name).first()
+
+    sellform = SellForm()
 
     if sellform.validate_on_submit():
 
@@ -274,20 +336,24 @@ def show_crypto(crypto_name):
 
         users_cryptos_names = [crypto.name for crypto in users_cryptos]
 
-
         for user_crypto in users_cryptos:
             if crypto.name == user_crypto.name:
                 usdt = users_cryptos_names.index("USDCUSDT")
                 sold_coin = users_cryptos_names.index(crypto.name)
-                user.crypto[sold_coin].amount -= sellform.amount.data
-                user.crypto[usdt].amount += user_crypto.price * sellform.amount.data
 
-                db.session.add(user)
-                db.session.commit()
+                if sellform.amount.data <= user.crypto[sold_coin].amount:
+                    user.crypto[sold_coin].amount -= sellform.amount.data
+                    user.crypto[usdt].amount += user_crypto.price * sellform.amount.data
 
-                return redirect(f'/user/{g.user.id}')
-            else:
-                return render_template('crypto.html', crypto = crypto, buyform = buyform, sellform = sellform)
+                    db.session.add(user)
+                    db.session.commit()
+
+                    return redirect(f'/user/{g.user.id}')
+                else:
+                    flash("You can't sell that much", "danger")
+                    return redirect(f"/cryptos/{crypto.name}/sell")
+
+    return render_template('crypto_sell.html', crypto = crypto, sellform = sellform)
 
 
 

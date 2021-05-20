@@ -12,10 +12,26 @@
       
         <link rel="stylesheet"
               href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
-        <link rel="stylesheet" href="/static/stylesheets/style.css">
+        {# <link rel="stylesheet" href="/static/stylesheets/style.css"> #}
         <link rel="shortcut icon" href="/static/favicon.ico">
       </head>
 <body>
+      {% if not g.user %}
+            <a href="/signup">Sign Up</a>
+            <a href="/login">Login</a>
+            <a href="/">Cryptos</a>
+
+      {% else %}
+            <a href="/user/{{ g.user.id }}">Profile</a>
+            <a href="/logout">Logout</a>
+            <a href="/">Cryptos</a>
+
+      {% endif %}
+
+      {% for category, message in get_flashed_messages(with_categories=True) %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+      
     {% block content %}body content goes here{% endblock %}
 </body>
 </html>
