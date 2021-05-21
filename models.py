@@ -21,24 +21,24 @@ class User(db.Model):
 
     id = db.Column(
         db.Integer,
-        primary_key=True,
+        primary_key=True
     )
 
     email = db.Column(
         db.Text,
         nullable=False,
-        unique=True,
+        unique=True
     )
 
     username = db.Column(
         db.Text,
         nullable=False,
-        unique=True,
+        unique=True
     )
 
     password = db.Column(
         db.Text,
-        nullable=False,
+        nullable=False
     )
 
     USDT = db.Column(
@@ -116,6 +116,14 @@ class Crypto(db.Model):
         nullable = False
     )
 
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name':self.name,
+            'price':self.price,
+            'volume':self.volume
+        }
+
     
 
 class UserCrypto(db.Model):
@@ -139,6 +147,14 @@ class UserCrypto(db.Model):
 
     user_crypto = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name':self.name,
+            'price':self.price,
+            'amount': self.amount,
+            'user-id':self.user_crypto
+        }
 
 
 
