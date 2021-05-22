@@ -111,17 +111,17 @@ class Crypto(db.Model):
         nullable=False,
     )
 
-    volume = db.Column(
-        db.Float,
-        nullable = False
-    )
+    # volume = db.Column(
+    #     db.Float,
+    #     nullable = False
+    # )
 
     def serialize(self):
         return {
             'id': self.id,
             'name':self.name,
-            'price':self.price,
-            'volume':self.volume
+            'price':self.price
+            # 'volume':self.volume
         }
 
     

@@ -5,15 +5,13 @@
 {% block content %}
 
 
-<h1>{{crypto.name}}</h1>
+<h1 class = "display-1">{{crypto.name}}</h1>
+<div class = "wrapper">
+<p id = "price">Price : {{crypto.price}}</p>
+</div>
+<a class = "btn btn-lg btn-success" href="/cryptos/{{crypto.name}}/buy">Buy</a>
 
-<p>{{crypto.price}}</p>
-
-<p>{{crypto.volume}}</p>
-
-<a href="/cryptos/{{crypto.name}}/buy">buy</a>
-
-<a href="/cryptos/{{crypto.name}}/sell">sell</a>
+<a class = "btn btn-lg btn-danger" href="/cryptos/{{crypto.name}}/sell">Sell</a>
 
 
 {% endblock %}

@@ -9,28 +9,33 @@
         <script src="https://unpkg.com/jquery"></script>
         <script src="https://unpkg.com/popper"></script>
         <script src="https://unpkg.com/bootstrap"></script>
-      
+        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
         <link rel="stylesheet"
               href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
-        {# <link rel="stylesheet" href="/static/stylesheets/style.css"> #}
+        
         <link rel="shortcut icon" href="/static/favicon.ico">
       </head>
-<body>
-      {% if not g.user %}
-            <a href="/signup">Sign Up</a>
-            <a href="/login">Login</a>
-            <a href="/">Cryptos</a>
-
-      {% else %}
-            <a href="/user/{{ g.user.id }}">Profile</a>
-            <a href="/logout">Logout</a>
-            <a href="/">Cryptos</a>
-
-      {% endif %}
-
-      {% for category, message in get_flashed_messages(with_categories=True) %}
-            <div class="alert alert-{{ category }}">{{ message }}</div>
-      {% endfor %}
+<body class = "bg-dark text-light text-center">
+      <nav class="navbar sticky-top navbar-expand navbar-light bg-light">
+            <div class="container-fluid">
+              <div class="navbar-header">
+                <a href="/" class="navbar-brand">
+                  Cryptos
+                </a>
+              </div>
+              <ul class="nav navbar-nav nav-tabs text-light">
+                {% if not g.user %}
+                <li class="nav-item active" ><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item" ><a class="nav-link" href="/signup">Sign up</a></li>
+                <li class="nav-item" ><a class="nav-link" href="/login">Log in</a></li>
+                {% else %}
+                <li class="nav-item active" ><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item" ><a class="nav-link" href="/user/{{ g.user.id }}">{{g.user.username}}'s Portfolio</a></li>
+                <li class="nav-item" ><a class="nav-link" href="/logout">Log out</a></li>
+                {% endif %}
+              </ul>
+            </div>
+          </nav>
       
     {% block content %}body content goes here{% endblock %}
     <script src="https://unpkg.com/axios/dist/axios.js"></script>

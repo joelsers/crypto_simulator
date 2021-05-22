@@ -33,7 +33,7 @@ def seed_cryptos():
 
     for x in crypto_json:
         if crypto_json[total]["symbol"][-4:] == "USDT":
-            crypto = Crypto(name = crypto_json[total]["symbol"], price = crypto_json[total]["price"], volume = 0)
+            crypto = Crypto(name = crypto_json[total]["symbol"], price = crypto_json[total]["price"])
             total += 1
             db.session.add(crypto)
             db.session.commit()
@@ -136,9 +136,15 @@ def logout():
     flash("You have successfully logged out.", 'success')
     return redirect("/login")
 
+@app.errorhandler(500)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('500.html')
 
-
-
+@app.errorhandler(404)
+def page_not_found(e):
+    
+    return render_template('404.html')
 
 @app.route('/')
 def redirect_home():
@@ -176,7 +182,6 @@ def show_home():
 @app.route('/user/<user_id>')
 def show_user(user_id):
 
-
     total = 0
 
     crypto_request = requests.get(f'{BASE_URL}ticker/price')
@@ -184,12 +189,11 @@ def show_user(user_id):
 
     user = User.query.get_or_404(user_id)
 
-    users_cryptos = [crypto for crypto in user.crypto if crypto.amount > 0 ]
-
-    users_cryptos_names = [crypto.name for crypto in users_cryptos]
+    users_cryptos = [crypto for crypto in user.crypto if crypto.amount > 0]
+    
+    users_cryptos_names = [crypto.name for crypto in users_cryptos if crypto.user_crypto == user_id ]
 
     value = 0
-
 
     for sym in crypto_json:
         crypto_symbol = crypto_json[total]["symbol"]
@@ -198,7 +202,7 @@ def show_user(user_id):
 
             edit_crypto = UserCrypto.query.filter_by(name = crypto_symbol).first()
             
-        
+
             edit_crypto.price = crypto_price
 
 
@@ -451,7 +455,7 @@ def buy_crypto_api(crypto_name):
 
         return (response, 201)
 
-    elif request.json["amount"] * crypto.price < user.USDT - 1:
+    elif request.json["amount"] * crypto.price < user.USDT - 1 and crypto.name in users_cryptos_names:
 
         bought_coin = users_cryptos_names.index(crypto.name)
 

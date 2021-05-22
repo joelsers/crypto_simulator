@@ -6,26 +6,24 @@
 
 
 
-<h1>Username: {{user.username}}</h1>
+<h1 class = "display-1">Username: {{user.username}}</h1>
 
-<p>Value: {{value}}</p>
-<ul>
+<h2 class = "display-6">Value: {{value}}</h2>
+<ul class = "list-group">
     {% for crypto in users_cryptos %}
     
     <li class='user_cryptos'>
-
-<a href="/cryptos/{{crypto.name}}">Symbol : {{crypto.name}}</a>
+<p>Symbol : <a class ="btn btn-primary" href="/cryptos/{{crypto.name}}">{{crypto.name}}</a></p>
 
         
-            <ul>
-                <li>Price : {{crypto.price}}</li>
-                <li>Amount : {{crypto.amount}}</li>
-            </ul>
-        
+            <ul class = "list-group">
+                <div class = "wrapper">
+                <li id = "price" class = "pb-3" >Price : {{crypto.price}}</li>
+                <li id = "price" class = "pb-3" >Amount : {{crypto.amount}}</li>
+            </div>
+            </ul>  
     </li>
-    
     {% endfor %}
- 
 </ul>
 
 {% endblock %}

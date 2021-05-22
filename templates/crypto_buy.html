@@ -6,11 +6,10 @@
 
 
 
-<h1>{{crypto.name}}</h1>
-
-<p>{{crypto.price}}</p>
-
-<p>{{crypto.volume}}</p>
+<h1 class = "display-1">{{crypto.name}}</h1>
+<div class = "wrapper">
+<p id = "price">Price : {{crypto.price}}</p>
+</div>
 
 <form method="POST" id="buy_form">
     {{ buyform.hidden_tag() }}
