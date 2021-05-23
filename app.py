@@ -7,7 +7,6 @@ from sqlalchemy.exc import IntegrityError
 
 from forms import UserAddForm, LoginForm, BuyForm, SellForm
 from models import db, connect_db, User, Crypto, UserCrypto
-from secret import DATABASE_URL
 import requests
 
 
@@ -17,7 +16,7 @@ app = Flask(__name__)
 
 # Get DB_URI from environ variable (useful for production/testing) or,
 # if not set there, use development local db.
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL','postgresql:///crypto_sim')
 if app.config['SQLALCHEMY_DATABASE_URI'].startswith("postgres://"):
     app.config['SQLALCHEMY_DATABASE_URI'] = app.config['SQLALCHEMY_DATABASE_URI'].replace("postgres://", "postgresql://", 1)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -265,9 +264,31 @@ def show_home():
         else:
             total += 1
 
-    cryptos = Crypto.query.all()
+    search = request.args.get('q')
+
+    if not search:
+        cryptos = Crypto.query.all()
+    else:
+        cryptos = Crypto.query.filter(Crypto.name.like(f"%{search.upper()}%")).all()
        
     return render_template('home.html',cryptos = cryptos)
+    
+
+# @app.route('/users')
+# def list_users():
+#     """Page with listing of users.
+
+#     Can take a 'q' param in querystring to search by that username.
+#     """
+
+#     search = request.args.get('q')
+
+#     if not search:
+#         cryptos = Crypto.query.all()
+#     else:
+#         cryptos = Crypto.query.filter(Crypto.name.like(f"%{search}%")).all()
+
+#     return render_template('users/index.html', users=users)
 
 
 @app.route('/user/<user_id>')
