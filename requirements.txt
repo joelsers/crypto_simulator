@@ -13,6 +13,7 @@ Flask-DebugToolbar==0.11.0
 Flask-SQLAlchemy==2.5.1
 Flask-WTF==0.14.3
 greenlet==1.1.0
+gunicorn==20.1.0
 idna==2.10
 importlib-metadata==4.0.1
 is-disposable-email==1.0.0
