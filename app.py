@@ -76,8 +76,6 @@ def buy_crypto_func(crypto_name, form):
     for usdt in usdts:
         if user.id == usdt.user_crypto:
             user_money = usdt
-    print('------------------------------------------------------------')
-    print('------------------------------------------------------------',user_money.amount)
 
     update_crypto_price(crypto_name)
 
