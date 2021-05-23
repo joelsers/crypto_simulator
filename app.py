@@ -6,6 +6,7 @@ from sqlalchemy.exc import IntegrityError
 
 from forms import UserAddForm, LoginForm, BuyForm, SellForm
 from models import db, connect_db, User, Crypto, UserCrypto
+from secret import DATABASE_URL
 import requests
 
 
@@ -15,7 +16,7 @@ app = Flask(__name__)
 
 # Get DB_URI from environ variable (useful for production/testing) or,
 # if not set there, use development local db.
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('postgresql://xzkvhgkwbcnvfa:2a7266803b2ff980dc97e6ae67738c3c6af38f408a20247f52965d450ff0caed@ec2-54-224-194-214.compute-1.amazonaws.com:5432/d1srfoi1gbsn3','postgresql:///crypto_sim')
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
