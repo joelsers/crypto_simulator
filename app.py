@@ -84,9 +84,11 @@ def buy_crypto_func(crypto_name, form):
 
     update_crypto_price(crypto_name)
 
+    if crypto_name == 'USDCUSDT':
+        flash("You can't trade that directly", "danger")
+        return False
 
-
-    if user_money.amount - (form.amount.data * crypto.price) > 0 and crypto.name not in crypto_names:
+    if user_money.amount - (form.amount.data * crypto.price) > 1 and crypto.name not in crypto_names:
 
         bought_crypto = UserCrypto(
             name = crypto.name,
@@ -108,7 +110,7 @@ def buy_crypto_func(crypto_name, form):
 
         
 
-    elif user_money.amount - (form.amount.data * crypto.price) > 0 and crypto.name in crypto_names:
+    elif user_money.amount - (form.amount.data * crypto.price) > 1 and crypto.name in crypto_names:
 
         bought_coin = crypto_names.index(crypto.name)
 
