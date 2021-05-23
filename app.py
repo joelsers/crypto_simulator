@@ -367,6 +367,10 @@ def sell_crypto(crypto_name):
 
     crypto = Crypto.query.filter_by(name = crypto_name).first()
 
+    if crypto_name == 'USDCUSDT':
+        flash("You can't trade that directly", "danger")
+        return False
+
     sellform = SellForm()
 
     if sellform.validate_on_submit():
