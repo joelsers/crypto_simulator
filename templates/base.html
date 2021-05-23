@@ -12,10 +12,9 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
         <link rel="stylesheet"
               href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
-        
-        <link rel="shortcut icon" href="/static/favicon.ico">
       </head>
-<body class = "bg-dark text-light text-center">
+
+<body class = "bg bg-dark text-light text-center">
       <nav class="navbar sticky-top navbar-expand navbar-light bg-light">
             <div class="container-fluid">
               <div class="navbar-header">
@@ -36,9 +35,20 @@
               </ul>
             </div>
           </nav>
+          <div class="container">
+            {% for category, message in get_flashed_messages(with_categories=True) %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+          
+          
       
-    {% block content %}body content goes here{% endblock %}
+    {% block content %}{% endblock %}
+  
+    
     <script src="https://unpkg.com/axios/dist/axios.js"></script>
     <script src="/static/main.js"></script>
 </body>
+
+
 </html>

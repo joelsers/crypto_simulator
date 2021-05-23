@@ -4,11 +4,10 @@
 
 {% block content %}
 
-
+<div class="row justify-content-md-center">
+<div class="col-md-7 col-lg-5">
 <h1 class = "display-1">{{crypto.name}}</h1>
-<div class = "wrapper">
 <p id = "price">Price : {{crypto.price}}</p>
-</div>
 
   <form method="POST" id="sell_form">
     {{ sellform.hidden_tag() }}
@@ -22,5 +21,8 @@
 
     <button class="btn btn-danger btn-block btn-lg"  class = "pt-1">Sell!</button>
   </form>
+
+</div>
+</div>
 
 {% endblock %}
