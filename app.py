@@ -54,13 +54,16 @@ def update_crypto_price(crypto_name):
     crypto = Crypto.query.filter_by(name = crypto_name).first()
 
     for x in crypto_json:
-        if crypto_name == crypto_json[total]["symbol"]:
-            crypto.price = crypto_json[total]["price"]
-            total += 1
-            db.session.add(crypto)
-            db.session.commit()
-        else:
-            total +=1
+        try:
+            if crypto_name == crypto_json[total]["symbol"]:
+                crypto.price = crypto_json[total]["price"]
+                total += 1
+                db.session.add(crypto)
+                db.session.commit()
+            else:
+                total +=1
+        except AttributeError:
+            print('Ooops. Something happened')
 
 def buy_crypto_func(crypto_name, form):
 
@@ -250,19 +253,22 @@ def show_home():
     crypto_json = crypto_request.json()
 
     for x in crypto_json:
-        if crypto_json[total]["symbol"][-4:] == "USDT":
-            crypto_symbol = crypto_json[total]["symbol"]
+        try:
+            if crypto_json[total]["symbol"][-4:] == "USDT":
+                crypto_symbol = crypto_json[total]["symbol"]
 
-            crypto_price = crypto_json[total]["price"]
+                crypto_price = crypto_json[total]["price"]
         
-            edit_crypto = Crypto.query.filter_by(name = crypto_symbol).first()
+                edit_crypto = Crypto.query.filter_by(name = crypto_symbol).first()
         
-            edit_crypto.price = crypto_price
-            total += 1
-            db.session.add(edit_crypto)
-            db.session.commit()
-        else:
-            total += 1
+                edit_crypto.price = crypto_price
+                total += 1
+                db.session.add(edit_crypto)
+                db.session.commit()
+            else:
+                total += 1
+        except AttributeError:
+            print("uh oh. something happened")
 
     search = request.args.get('q')
 
