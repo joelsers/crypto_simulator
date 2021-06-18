@@ -10,7 +10,7 @@ class UserAddForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('E-mail', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[Length(min=6)])
-    USDT = FloatField('USDT' , validators = [DataRequired()])
+    USDT = FloatField('USDT' , validators = [DataRequired("How much USD do you want to start with? This must be a number.")])
 
 
 class LoginForm(FlaskForm):

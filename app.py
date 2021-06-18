@@ -366,6 +366,10 @@ def buy_crypto(crypto_name):
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/login")
+    
+    if crypto_name == 'USDCUSDT':
+        flash("You can't trade that directly", "danger")
+        return redirect('/cryptos/USDCUSDT')
 
     crypto = Crypto.query.filter_by(name = crypto_name).first()
 
@@ -396,7 +400,7 @@ def sell_crypto(crypto_name):
 
     if crypto_name == 'USDCUSDT':
         flash("You can't trade that directly", "danger")
-        return False
+        return redirect('/cryptos/USDCUSDT')
 
     sellform = SellForm()
 
