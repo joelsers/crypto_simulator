@@ -7,7 +7,7 @@ from wtforms.validators import DataRequired, Email, Length
 class UserAddForm(FlaskForm):
     """Form for adding users."""
 
-    username = StringField('Username', validators=[DataRequired()])
+    username = StringField('Username', validators=[DataRequired(), Length(min=6)])
     email = StringField('E-mail', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[Length(min=6)])
     USDT = FloatField('USDT' , validators = [DataRequired("How much USD do you want to start with? This must be a number.")])
