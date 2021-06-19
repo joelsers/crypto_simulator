@@ -6,25 +6,26 @@
 
 
 <div class="row justify-content-md-center">
-<div class="col-md-7 col-lg-5">
-<h1 class = "display-1">{{crypto.name}}</h1>
+  <div class="col-md-7 col-lg-5">
+    <h1 class="display-1">{{crypto.name}}</h1>
 
-<p id = "price">Price : {{crypto.price}}</p>
+    <p id="price">Price : {{crypto.price}}</p>
+    <p id="price">USDT : {{USDT}}</p>
 
 
-<form method="POST" id="buy_form">
-    {{ buyform.hidden_tag() }}
+    <form method="POST" id="buy_form">
+      {{ buyform.hidden_tag() }}
 
-    {% for field in buyform if field.widget.input_type != 'hidden' %}
+      {% for field in buyform if field.widget.input_type != 'hidden' %}
       {% for error in field.errors %}
-        <span class="text-danger">{{ error }}</span>
+      <span class="text-danger">{{ error }}</span>
       {% endfor %}
       {{ field(placeholder=field.label.text, class="form-control") }}
-    {% endfor %}
+      {% endfor %}
 
-    <button class="btn btn-success btn-block btn-lg">Buy!</button>
-  </form>
-</div>
+      <button class="btn btn-success btn-block btn-lg">Buy!</button>
+    </form>
+  </div>
 </div>
 
 

@@ -231,7 +231,7 @@ def logout():
 
 @app.errorhandler(500)
 def page_not_found(e):
-    # note that we set the 404 status explicitly
+    
     return render_template('500.html')
 
 @app.errorhandler(404)
@@ -280,22 +280,6 @@ def show_home():
     return render_template('home.html',cryptos = cryptos)
     
 
-# @app.route('/users')
-# def list_users():
-#     """Page with listing of users.
-
-#     Can take a 'q' param in querystring to search by that username.
-#     """
-
-#     search = request.args.get('q')
-
-#     if not search:
-#         cryptos = Crypto.query.all()
-#     else:
-#         cryptos = Crypto.query.filter(Crypto.name.like(f"%{search}%")).all()
-
-#     return render_template('users/index.html', users=users)
-
 
 @app.route('/user/<user_id>')
 def show_user(user_id):
@@ -332,6 +316,7 @@ def show_user(user_id):
             total +=1
 
     for crypto in users_cryptos:
+        
         value += crypto.price * crypto.amount
 
 
@@ -352,12 +337,29 @@ def show_crypto(crypto_name):
 
     update_crypto_price(crypto_name)
 
+    user = User.query.get_or_404(g.user.id)
+
+    users_usdt = UserCrypto.query.filter_by(name = 'USDCUSDT')
+
+    usdts = [usdt for usdt in users_usdt]
+
+    user_crypto = [crypto for crypto in user.crypto]
+
+    crypto_names = [crypto.name for crypto in user_crypto]
+        
+
+    for usdt in usdts:
+        if user.id == usdt.user_crypto:
+            user_money = usdt
+
+    USDT = user_money.amount
+
     crypto = Crypto.query.filter_by(name = crypto_name).first()
 
 
 
 
-    return render_template('crypto.html', crypto = crypto)
+    return render_template('crypto.html', crypto = crypto, USDT = USDT)
 
 
 @app.route('/cryptos/<crypto_name>/buy', methods = ['GET', 'POST'])
@@ -366,6 +368,25 @@ def buy_crypto(crypto_name):
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/login")
+
+    user = User.query.get_or_404(g.user.id)
+
+    users_usdt = UserCrypto.query.filter_by(name = 'USDCUSDT')
+
+    usdts = [usdt for usdt in users_usdt]
+
+    user_crypto = [crypto for crypto in user.crypto]
+
+    crypto_names = [crypto.name for crypto in user_crypto]
+        
+
+    for usdt in usdts:
+        if user.id == usdt.user_crypto:
+            user_money = usdt
+
+    USDT = user_money.amount
+
+    crypto = Crypto.query.filter_by(name = crypto_name).first()
     
     if crypto_name == 'USDCUSDT':
         flash("You can't trade that directly", "danger")
@@ -385,7 +406,7 @@ def buy_crypto(crypto_name):
         else:
             return redirect(f'/cryptos/{crypto.name}/buy')
 
-    return render_template('crypto_buy.html', crypto = crypto, buyform = buyform)
+    return render_template('crypto_buy.html', crypto = crypto, buyform = buyform, USDT = USDT)
 
 
 @app.route('/cryptos/<crypto_name>/sell', methods = ['GET', 'POST'])
@@ -397,6 +418,23 @@ def sell_crypto(crypto_name):
         return redirect("/login")
 
     crypto = Crypto.query.filter_by(name = crypto_name).first()
+
+    user = User.query.get_or_404(g.user.id)
+
+    users_usdt = UserCrypto.query.filter_by(name = 'USDCUSDT')
+
+    usdts = [usdt for usdt in users_usdt]
+
+    user_crypto = [crypto for crypto in user.crypto]
+
+    crypto_names = [crypto.name for crypto in user_crypto]
+        
+
+    for usdt in usdts:
+        if user.id == usdt.user_crypto:
+            user_money = usdt
+
+    USDT = user_money.amount
 
     if crypto_name == 'USDCUSDT':
         flash("You can't trade that directly", "danger")
@@ -429,7 +467,7 @@ def sell_crypto(crypto_name):
                     flash("You can't sell that much", "danger")
                     return redirect(f"/cryptos/{crypto.name}/sell")
 
-    return render_template('crypto_sell.html', crypto = crypto, sellform = sellform)
+    return render_template('crypto_sell.html', crypto = crypto, sellform = sellform, USDT = USDT)
 
 
 

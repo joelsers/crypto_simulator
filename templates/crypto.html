@@ -5,13 +5,14 @@
 {% block content %}
 
 
-<h1 class = "display-1">{{crypto.name}}</h1>
-<div class = "wrapper">
-<p id = "price">Price : {{crypto.price}}</p>
+<h1 class="display-1">{{crypto.name}}</h1>
+<div class="wrapper">
+    <p id="price">Price : {{crypto.price}}</p>
+    <p id="price">USDT : {{USDT}}</p>
 </div>
-<a class = "btn btn-lg btn-success" href="/cryptos/{{crypto.name}}/buy">Buy</a>
+<a class="btn btn-lg btn-success" href="/cryptos/{{crypto.name}}/buy">Buy</a>
 
-<a class = "btn btn-lg btn-danger" href="/cryptos/{{crypto.name}}/sell">Sell</a>
+<a class="btn btn-lg btn-danger" href="/cryptos/{{crypto.name}}/sell">Sell</a>
 
 
 {% endblock %}
