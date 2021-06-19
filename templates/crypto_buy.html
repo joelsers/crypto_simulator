@@ -9,8 +9,8 @@
   <div class="col-md-7 col-lg-5">
     <h1 class="display-1">{{crypto.name}}</h1>
 
-    <p id="price">Price : {{crypto.price}}</p>
-    <p id="price">USDT : {{USDT}}</p>
+    <p id="price">Price : {{"{:.8f}".format(crypto.price)}}</p>
+    <p id="price">USDT : {{"{:.8f}".format(USDT)}}</p>
 
 
     <form method="POST" id="buy_form">

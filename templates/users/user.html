@@ -9,9 +9,9 @@
 <h1 class="display-1">Username: {{user.username}}</h1>
 
 {% if user_positive == True %}
-<h2 class="display-6 text-success">Value: {{value}} {{ "%.3f%%" % (100 * percent_change) }}</h2>
+<h2 class="display-6 text-success">Value: {{"{:.2f}".format(value)}} {{ "%.3f%%" % (100 * percent_change) }}</h2>
 {% elif user_positive == False %}
-<h2 class="display-6 text-danger">Value: {{value}} {{ "%.3f%%" % (100 * percent_change) }}</h2>
+<h2 class="display-6 text-danger">Value: {{"{:.2f}".format(value)}} {{ "%.3f%%" % (100 * percent_change) }}</h2>
 {% endif %}
 
 <ul class="list-group">
@@ -23,8 +23,8 @@
 
         <ul class="list-group">
             <div class="wrapper">
-                <li id="price" class="pb-3">Price : {{crypto.price}}</li>
-                <li id="price" class="pb-3">Amount : {{crypto.amount}}</li>
+                <li id="price" class="pb-3">Price : {{"{:.8f}".format(crypto.price)}}</li>
+                <li id="price" class="pb-3">Amount : {{"{:.8f}".format(crypto.amount)}}</li>
                 <li id="price" class="pb-3">Value of {{crypto.name}}: {{crypto.amount * crypto.price}}</li>
             </div>
         </ul>

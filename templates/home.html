@@ -16,7 +16,7 @@
         <p><b>Symbol : </b><a class="btn btn-primary" href="/cryptos/{{crypto.name}}">{{crypto.name}}</a></p>
         <ul class="list-group">
             <div class="wrapper">
-                <li id="price" class="pb-3"><b>Price : {{crypto.price}}</b>
+                <li id="price" class="pb-3"><b>Price : {{"{:.8f}".format(crypto.price)}}</b>
                 </li>
                 <li>
                     <a class="btn btn-sm btn-success mb-3" href="/cryptos/{{crypto.name}}/buy">Buy!</a>
