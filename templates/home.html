@@ -8,22 +8,22 @@
 
 
 
-<h1 class ="display-1 text-center">All Cryptocurrencies</h1>
+<h1 class="display-1 text-center">All Cryptocurrencies</h1>
 
-<ul class = "list-group">
+<ul class="list-group">
     {% for crypto in cryptos %}
     <li class='cryptos'>
-        <p><b>Symbol : </b><a class = "btn btn-primary"href="/cryptos/{{crypto.name}}">{{crypto.name}}</a></p>
-            <ul class = "list-group">
-                <div class = "wrapper">
-                <li id = "price" class = "pb-3" ><b>Price : {{crypto.price}}</b>
+        <p><b>Symbol : </b><a class="btn btn-primary" href="/cryptos/{{crypto.name}}">{{crypto.name}}</a></p>
+        <ul class="list-group">
+            <div class="wrapper">
+                <li id="price" class="pb-3"><b>Price : {{crypto.price}}</b>
                 </li>
                 <li>
-                    <a class ="btn btn-sm btn-success mb-3"href="/cryptos/{{crypto.name}}/buy">Buy!</a>
-                    <a class ="btn btn-sm btn-danger mb-3"href="/cryptos/{{crypto.name}}/sell">Sell!</a>
+                    <a class="btn btn-sm btn-success mb-3" href="/cryptos/{{crypto.name}}/buy">Buy!</a>
+                    <a class="btn btn-sm btn-danger mb-3" href="/cryptos/{{crypto.name}}/sell">Sell!</a>
                 </li>
             </div>
-            </ul>
+        </ul>
     </li>
     {% endfor %}
 </ul>
