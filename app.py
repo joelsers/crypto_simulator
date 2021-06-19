@@ -319,12 +319,21 @@ def show_user(user_id):
         
         value += crypto.price * crypto.amount
 
+    percent_change = 0
+
+    difference = value - user.USDT
+
+    if difference > 0:
+        user_positive = True
+    elif difference < 0:
+        user_positive = False
+
 
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/login") 
     else:
-        return render_template('users/user.html', user=user, users_cryptos=users_cryptos, value = value)
+        return render_template('users/user.html', user=user, users_cryptos=users_cryptos, value = value, user_positive = user_positive)
 
 
 

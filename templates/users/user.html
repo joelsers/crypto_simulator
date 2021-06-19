@@ -8,7 +8,12 @@
 
 <h1 class="display-1">Username: {{user.username}}</h1>
 
-<h2 class="display-6">Value: {{value}}</h2>
+{% if user_positive == True %}
+<h2 class="display-6 text-success">Value: {{value}}</h2>
+{% elif user_positive == False %}
+<h2 class="display-6 text-danger">Value: {{value}}</h2>
+{% endif %}
+
 <ul class="list-group">
     {% for crypto in users_cryptos %}
 
