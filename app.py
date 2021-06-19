@@ -322,18 +322,23 @@ def show_user(user_id):
     percent_change = 0
 
     difference = value - user.USDT
+    negative_difference = user.USDT - value
 
     if difference > 0:
         user_positive = True
+        percent_change = difference/ (user.USDT * 100)
+        print(f'{"%.2f%%" % (100 * percent_change)} ----------------------------------------------------------------------------------------------------')
     elif difference < 0:
         user_positive = False
+        percent_change = negative_difference / (user.USDT *100)
+        print(f'{"%.2f%%" % (100 * percent_change)} ----------------------------------------------------------------------------------------------------')
 
 
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/login") 
     else:
-        return render_template('users/user.html', user=user, users_cryptos=users_cryptos, value = value, user_positive = user_positive)
+        return render_template('users/user.html', user=user, users_cryptos=users_cryptos, value = value, user_positive = user_positive, percent_change = percent_change)
 
 
 
