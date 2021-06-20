@@ -90,7 +90,7 @@ def buy_crypto_func(crypto_name, form):
         flash("You can't trade that directly", "danger")
         return False
 
-    if user_money.amount - (form.amount.data * crypto.price) > 1 and crypto.name not in crypto_names:
+    if user_money.amount - (form.amount.data * crypto.price) > 1 and crypto.name not in crypto_names and form.amount.data > 0.00000000:
 
         bought_crypto = UserCrypto(
             name = crypto.name,
@@ -283,6 +283,9 @@ def show_home():
 
 @app.route('/user/<user_id>')
 def show_user(user_id):
+    if not g.user:
+        flash("Access unauthorized.", "danger")
+        return redirect("/login")
 
     total = 0
 
@@ -467,7 +470,7 @@ def sell_crypto(crypto_name):
                 usdt = users_cryptos_names.index("USDCUSDT")
                 sold_coin = users_cryptos_names.index(crypto.name)
 
-                if sellform.amount.data <= user.crypto[sold_coin].amount:
+                if sellform.amount.data <= user.crypto[sold_coin].amount and sellform.amount.data > 0.00000000:
                     user.crypto[sold_coin].amount -= sellform.amount.data
                     user.crypto[usdt].amount += user_crypto.price * sellform.amount.data
 
