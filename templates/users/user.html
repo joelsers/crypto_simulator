@@ -9,7 +9,7 @@
 <h1 class="display-1">Username: {{user.username}}</h1>
 
 {% if user_positive == True %}
-<h2 class="display-6 text-success">Value: {{"{:.2f}".format(value)}} {{ "%.3f%%" % (10000 * percent_change) }}</h2>
+<h2 class="display-6 text-success">Value: {{"{:.2f}".format(value)}} +{{ "%.3f%%" % (10000 * percent_change) }}</h2>
 {% elif user_positive == False %}
 <h2 class="display-6 text-danger">Value: {{"{:.2f}".format(value)}} -{{ "%.3f%%" % (10000 * percent_change) }}</h2>
 {% endif %}
