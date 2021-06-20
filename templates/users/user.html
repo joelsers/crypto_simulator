@@ -25,7 +25,8 @@
             <div class="wrapper">
                 <li id="price" class="pb-3">Price : {{"{:.8f}".format(crypto.price)}}</li>
                 <li id="price" class="pb-3">Amount : {{"{:.8f}".format(crypto.amount)}}</li>
-                <li id="price" class="pb-3">Value of {{crypto.name}}: {{crypto.amount * crypto.price}}</li>
+                <li id="price" class="pb-3">Value of {{crypto.name}}: {{"{:.2f}".format(crypto.amount * crypto.price)}}
+                </li>
             </div>
         </ul>
     </li>

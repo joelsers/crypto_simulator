@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
   <title>{% block title %}Crypto_Sim{% endblock %}</title>
 
   <link rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
@@ -14,25 +15,29 @@
 
 <body class="bg bg-dark text-light text-center">
   <nav class="navbar sticky-top navbar-expand navbar-light bg-light">
+
     <div class="container-fluid">
       <div class="navbar-header">
         <a href="/" class="navbar-brand">
           Cryptos
         </a>
       </div>
+
       <ul class="nav navbar-nav nav-tabs text-light">
         {% if request.endpoint != None %}
         <li>
-          <form class="navbar-form navbar-right" action="/cryptos">
-            <input name="q" class="form-control" placeholder="Search Crypto" id="search">
-            <button class="btn btn-default">Search
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
-                viewBox="0 0 16 16">
-                <path
-                  d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z">
-                </path>
-              </svg>
-            </button>
+          <form class="navbar-form navbar-left" action="/cryptos">
+            <div class="input-group">
+              <input name="q" class="form-control" placeholder="Search Crypto" id="search">
+              <button class="btn btn-default my-2 my-sm-0" type="submit">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="fa fa-search"
+                  viewBox="0 0 16 16">
+                  <path
+                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z">
+                  </path>
+                </svg>
+              </button>
+            </div>
           </form>
         </li>
         {% endif %}
@@ -46,6 +51,7 @@
         <li class="nav-item"><a class="nav-link" href="/logout">Log out</a></li>
         {% endif %}
       </ul>
+
     </div>
   </nav>
   <div class="container">
