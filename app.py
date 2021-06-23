@@ -283,16 +283,25 @@ def show_home():
 
 @app.route('/user/<user_id>')
 def show_user(user_id):
+    print(f'{g.user.id}-----------------------------------------------------------------------------------')
+    print(user_id)
+
+    user = User.query.get_or_404(user_id)
+
     if not g.user:
         flash("Access unauthorized.", "danger")
         return redirect("/login")
-
+    elif g.user.id != user.id:
+        flash("Access unauthorized.", "danger")
+        return redirect(f"/user/{g.user.id}")
+    
+    
     total = 0
 
     crypto_request = requests.get(f'{BASE_URL}ticker/price')
     crypto_json = crypto_request.json()
 
-    user = User.query.get_or_404(user_id)
+    
 
     users_cryptos = [crypto for crypto in user.crypto if crypto.amount > 0]
     
@@ -332,7 +341,7 @@ def show_user(user_id):
         percent_change = difference/ (user.USDT * 100)
     elif difference < 0:
         user_positive = False
-        percent_change = negative_difference / (user.USDT *100)
+        percent_change = negative_difference / (user.USDT * 100)
         
 
     if not g.user:
@@ -483,23 +492,6 @@ def sell_crypto(crypto_name):
                     return redirect(f"/cryptos/{crypto.name}/sell")
 
     return render_template('crypto_sell.html', crypto = crypto, sellform = sellform, USDT = USDT)
-
-
-
-
-# @app.route('/test/<user_id>')
-# def test_route(user_id):
-
-#     user = User.query.get_or_404(user_id)
-
-#     users_cryptos = [crypto for crypto in user.crypto]
-
-#     users_cryptos_names = [crypto.name for crypto in users_cryptos]
-
-#     usdt = users_cryptos_names.index("USDCUSDT")
-
-#     return render_template('users/test.html', user=user, usdt = usdt)
-
 
 
 @app.route('/api')
