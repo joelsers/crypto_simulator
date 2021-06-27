@@ -53,7 +53,28 @@ def update_crypto_price(crypto_name):
 
     crypto = Crypto.query.filter_by(name = crypto_name).first()
 
-    for x in crypto_json:
+    for crypto_currency in crypto_json:
+        try:
+            if crypto_name == crypto_json[total]["symbol"]:
+                crypto.price = crypto_json[total]["price"]
+                total += 1
+                db.session.add(crypto)
+                db.session.commit()
+            else:
+                total +=1
+        except AttributeError:
+            print('Ooops. Something happened')
+
+
+def update_user_crypto_price(crypto_name):
+    total = 0
+
+    crypto_request = requests.get(f'{BASE_URL}ticker/price')
+    crypto_json = crypto_request.json()
+
+    crypto = UserCrypto.query.filter_by(name = crypto_name).first()
+
+    for crypto_currency in crypto_json:
         try:
             if crypto_name == crypto_json[total]["symbol"]:
                 crypto.price = crypto_json[total]["price"]
@@ -252,7 +273,7 @@ def show_home():
     crypto_request = requests.get(f'{BASE_URL}ticker/price')
     crypto_json = crypto_request.json()
 
-    for x in crypto_json:
+    for crypto in crypto_json:
         try:
             if crypto_json[total]["symbol"][-4:] == "USDT":
                 crypto_symbol = crypto_json[total]["symbol"]
@@ -265,10 +286,15 @@ def show_home():
                 total += 1
                 db.session.add(edit_crypto)
                 db.session.commit()
+
+
+                
             else:
                 total += 1
         except AttributeError:
             print("uh oh. something happened")
+
+    
 
     search = request.args.get('q')
 
@@ -276,6 +302,8 @@ def show_home():
         cryptos = Crypto.query.all()
     else:
         cryptos = Crypto.query.filter(Crypto.name.like(f"%{search.upper()}%")).all()
+
+    # db.session.commit()
        
     return render_template('home.html',cryptos = cryptos)
     
@@ -283,8 +311,6 @@ def show_home():
 
 @app.route('/user/<user_id>')
 def show_user(user_id):
-    print(f'{g.user.id}-----------------------------------------------------------------------------------')
-    print(user_id)
 
     user = User.query.get_or_404(user_id)
 
@@ -294,35 +320,29 @@ def show_user(user_id):
     elif g.user.id != user.id:
         flash("Access unauthorized.", "danger")
         return redirect(f"/user/{g.user.id}")
-    
-    
-    total = 0
 
     crypto_request = requests.get(f'{BASE_URL}ticker/price')
     crypto_json = crypto_request.json()
 
-    
-
     users_cryptos = [crypto for crypto in user.crypto if crypto.amount > 0]
     
     users_cryptos_names = [crypto.name for crypto in users_cryptos ]
-
+    total = 0
     value = 0
 
-    for sym in crypto_json:
+    
+    for crypto in crypto_json:
         crypto_symbol = crypto_json[total]["symbol"]
         crypto_price = crypto_json[total]["price"]
         if crypto_symbol in users_cryptos_names:
-
+            
             edit_crypto = UserCrypto.query.filter_by(name = crypto_symbol).first()
             
-
             edit_crypto.price = crypto_price
-
 
             db.session.add(edit_crypto)
             db.session.commit()
-
+            
             total+=1
         else:
             total +=1
@@ -346,7 +366,7 @@ def show_user(user_id):
 
     if not g.user:
         flash("Access unauthorized.", "danger")
-        return redirect("/login") 
+        return redirect("/login")
     else:
         return render_template('users/user.html', user=user, users_cryptos=users_cryptos, value = value, user_positive = user_positive, percent_change = percent_change)
 
@@ -370,6 +390,16 @@ def show_crypto(crypto_name):
     user_crypto = [crypto for crypto in user.crypto]
 
     crypto_names = [crypto.name for crypto in user_crypto]
+
+    users_cryptos_names = [crypto.name for crypto in user_crypto]
+
+    crypto = Crypto.query.filter_by(name = crypto_name).first()
+
+    try:
+        coin = users_cryptos_names.index(crypto.name)
+        crypto_amount = user.crypto[coin].amount
+    except ValueError:
+        crypto_amount = 0
         
 
     for usdt in usdts:
@@ -383,7 +413,7 @@ def show_crypto(crypto_name):
 
 
 
-    return render_template('crypto.html', crypto = crypto, USDT = USDT)
+    return render_template('crypto.html', crypto = crypto, USDT = USDT, crypto_amount = crypto_amount)
 
 
 @app.route('/cryptos/<crypto_name>/buy', methods = ['GET', 'POST'])
@@ -402,6 +432,16 @@ def buy_crypto(crypto_name):
     user_crypto = [crypto for crypto in user.crypto]
 
     crypto_names = [crypto.name for crypto in user_crypto]
+
+    users_cryptos_names = [crypto.name for crypto in user_crypto]
+
+    crypto = Crypto.query.filter_by(name = crypto_name).first()
+
+    try:
+        bought_coin = users_cryptos_names.index(crypto.name)
+        crypto_amount = user.crypto[bought_coin].amount
+    except ValueError:
+        crypto_amount = 0
         
 
     for usdt in usdts:
@@ -430,7 +470,7 @@ def buy_crypto(crypto_name):
         else:
             return redirect(f'/cryptos/{crypto.name}/buy')
 
-    return render_template('crypto_buy.html', crypto = crypto, buyform = buyform, USDT = USDT)
+    return render_template('crypto_buy.html', crypto = crypto, buyform = buyform, USDT = USDT, crypto_amount = crypto_amount)
 
 
 @app.route('/cryptos/<crypto_name>/sell', methods = ['GET', 'POST'])
@@ -443,6 +483,8 @@ def sell_crypto(crypto_name):
 
     crypto = Crypto.query.filter_by(name = crypto_name).first()
 
+    update_crypto_price(crypto_name)
+
     user = User.query.get_or_404(g.user.id)
 
     users_usdt = UserCrypto.query.filter_by(name = 'USDCUSDT')
@@ -452,6 +494,15 @@ def sell_crypto(crypto_name):
     user_crypto = [crypto for crypto in user.crypto]
 
     crypto_names = [crypto.name for crypto in user_crypto]
+
+    users_cryptos_names = [crypto.name for crypto in user_crypto]
+    try:
+        sold_coin = users_cryptos_names.index(crypto.name)
+        crypto_amount = user.crypto[sold_coin].amount
+    except ValueError:
+        crypto_amount = 0
+        
+    
         
 
     for usdt in usdts:
@@ -467,6 +518,8 @@ def sell_crypto(crypto_name):
     sellform = SellForm()
 
     if sellform.validate_on_submit():
+
+        update_crypto_price(crypto_name)
 
         user = User.query.get_or_404(g.user.id)
 
@@ -491,7 +544,7 @@ def sell_crypto(crypto_name):
                     flash("You can't sell that much", "danger")
                     return redirect(f"/cryptos/{crypto.name}/sell")
 
-    return render_template('crypto_sell.html', crypto = crypto, sellform = sellform, USDT = USDT)
+    return render_template('crypto_sell.html', crypto = crypto, sellform = sellform, USDT = USDT, crypto_amount = crypto_amount)
 
 
 @app.route('/api')

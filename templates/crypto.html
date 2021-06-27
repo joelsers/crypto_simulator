@@ -8,6 +8,7 @@
 <h1 class="display-1">{{crypto.name}}</h1>
 <div class="wrapper">
     <p id="price">Price : {{"{:.8f}".format(crypto.price)}}</p>
+    <p id="price">Amount : {{"{:.8f}".format(crypto_amount)}}</p>
     <p id="price">USDT : {{"{:.8f}".format(USDT)}}</p>
 </div>
 <a class="btn btn-lg btn-success" href="/cryptos/{{crypto.name}}/buy">Buy</a>
