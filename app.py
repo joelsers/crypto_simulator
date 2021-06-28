@@ -320,7 +320,7 @@ def show_home():
        
     return render_template('home.html',cryptos = cryptos, searched = searched)
     
-
+percent_change = 0
 
 @app.route('/user/<user_id>')
 def show_user(user_id):
