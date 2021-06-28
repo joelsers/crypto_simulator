@@ -325,6 +325,7 @@ user_positive = True
 
 @app.route('/user/<user_id>')
 def show_user(user_id):
+    
 
     user = User.query.get_or_404(user_id)
 
@@ -338,6 +339,9 @@ def show_user(user_id):
     crypto_request = requests.get(f'{BASE_URL}ticker/price')
     crypto_json = crypto_request.json()
 
+    crypto_volume_request = requests.get(f'{BASE_URL}ticker/24hr')
+    crypto_volume_json = crypto_volume_request.json()
+
     users_cryptos = [crypto for crypto in user.crypto if crypto.amount > 0]
     
     users_cryptos_names = [crypto.name for crypto in users_cryptos ]
@@ -348,12 +352,16 @@ def show_user(user_id):
     for crypto in crypto_json:
         crypto_symbol = crypto_json[total]["symbol"]
         crypto_price = crypto_json[total]["price"]
+        crypto_open_price = crypto_volume_json[total]["openPrice"]
         if crypto_symbol in users_cryptos_names:
             
-            edit_crypto = UserCrypto.query.filter_by(name = crypto_symbol).first()
+            edit_crypto = UserCrypto.query.order_by(UserCrypto.price.desc()).filter_by(name = crypto_symbol).first()
             
             edit_crypto.price = crypto_price
-
+            if edit_crypto.price > crypto_open_price:
+                print(f'{crypto_symbol} {float(edit_crypto.price) - float(crypto_open_price)} ----------------------------------------')
+            else:
+                print("hmmbaba----------------------------------------------------------------------------------")
             db.session.add(edit_crypto)
             db.session.commit()
             
@@ -395,6 +403,10 @@ def show_crypto(crypto_name):
 
     update_crypto_price(crypto_name)
 
+    crypto_kline_request = requests.get(f'{BASE_URL}klines?symbol={crypto_name}&interval=3m')
+    crypto_kline_json = crypto_kline_request.json()
+    
+
     user = User.query.get_or_404(g.user.id)
 
     users_usdt = UserCrypto.query.filter_by(name = 'USDCUSDT')
@@ -415,7 +427,6 @@ def show_crypto(crypto_name):
     except ValueError:
         crypto_amount = 0
         
-
     for usdt in usdts:
         if user.id == usdt.user_crypto:
             user_money = usdt
@@ -423,11 +434,18 @@ def show_crypto(crypto_name):
     USDT = user_money.amount
 
     crypto = Crypto.query.filter_by(name = crypto_name).first()
+    
+    difference = float(crypto.price) - float(crypto_kline_json[0][1])
+    negative_difference = float(crypto_kline_json[0][1]) - float(crypto.price)
 
+    if difference >= 0:
+        user_positive = True
+        percent_change = difference / float(crypto_kline_json[0][1]) * 100
+    elif difference < 0:
+        user_positive = False
+        percent_change = negative_difference / float(crypto_kline_json[0][1]) * 100
 
-
-
-    return render_template('crypto.html', crypto = crypto, USDT = USDT, crypto_amount = crypto_amount)
+    return render_template('crypto.html', crypto = crypto, USDT = USDT, crypto_amount = crypto_amount, percent_change=percent_change,user_positive=user_positive)
 
 
 @app.route('/cryptos/<crypto_name>/buy', methods = ['GET', 'POST'])
