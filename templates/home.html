@@ -11,6 +11,53 @@
 <h1 class="display-1 text-center">All Cryptocurrencies</h1>
 
 <ul class="list-group">
+    {% if searched != True%}
+    {% for crypto in cryptos.items %}
+    <li class='cryptos'>
+        <p><b>Symbol : </b><a class="btn btn-primary" href="/cryptos/{{crypto.name}}">{{crypto.name}}</a></p>
+        <ul class="list-group">
+            <div class="wrapper">
+                <li id="price" class="pb-3"><b>Price : {{"{:.8f}".format(crypto.price)}}</b>
+                </li>
+                <li>
+                    <a class="btn btn-sm btn-success mb-3" href="/cryptos/{{crypto.name}}/buy">Buy!</a>
+                    <a class="btn btn-sm btn-danger mb-3" href="/cryptos/{{crypto.name}}/sell">Sell!</a>
+                </li>
+            </div>
+        </ul>
+    </li>
+    {% endfor %}
+    <div class="text-right">
+        <a href="{{ url_for('show_home', page=cryptos.prev_num) }}" class="btn btn-outline-light 
+           {% if cryptos.page == 1 %}disabled{% endif %}">
+            &laquo;
+        </a>
+        <!-- Loop through the number of pages to display a link for each-->
+        {% for page_num in cryptos.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+        <!-- Check for the active page and set the link to "Active"-->
+        {% if cryptos.page == page_num %}
+        <a href="{{ url_for('show_home', page=page_num) }}" class="btn btn-dark">
+            {{ page_num }}
+        </a>
+        {% else %}
+        <a href="{{ url_for('show_home', page=page_num) }}" class="btn btn-outline-light ">
+            {{ page_num }}
+        </a>
+        {% endif %}
+        {% else %}
+        ...
+        {% endif %}
+        {% endfor %}
+        <a href="{{ url_for('show_home', page=cryptos.next_num) }}" class="btn btn-outline-light
+           {% if cryptos.page == cryptos.pages %}disabled{% endif %}">
+            &raquo;
+        </a>
+    </div>
+    <p class="text-right mt-3">
+        Showing page {{ cryptos.page }} of {{ cryptos.pages }}
+    </p>
+    {% else %}
     {% for crypto in cryptos %}
     <li class='cryptos'>
         <p><b>Symbol : </b><a class="btn btn-primary" href="/cryptos/{{crypto.name}}">{{crypto.name}}</a></p>
@@ -26,5 +73,6 @@
         </ul>
     </li>
     {% endfor %}
+    {% endif %}
 </ul>
 {% endblock %}

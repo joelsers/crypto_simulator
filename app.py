@@ -4,7 +4,7 @@ import re
 from flask import Flask, render_template, request, flash, redirect, session, g, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
-
+from sqlalchemy import desc
 from forms import UserAddForm, LoginForm, BuyForm, SellForm
 from models import db, connect_db, User, Crypto, UserCrypto
 import requests
@@ -34,10 +34,13 @@ def seed_cryptos():
 
     crypto_request = requests.get(f'{BASE_URL}ticker/price')
     crypto_json = crypto_request.json()
+    
+    crypto_volume_request = requests.get(f'{BASE_URL}ticker/24hr')
+    crypto_volume_json = crypto_volume_request.json()
 
-    for x in crypto_json:
+    for crypto_currency in crypto_json:
         if crypto_json[total]["symbol"][-4:] == "USDT":
-            crypto = Crypto(name = crypto_json[total]["symbol"], price = crypto_json[total]["price"])
+            crypto = Crypto(name = crypto_json[total]["symbol"], price = crypto_json[total]["price"], volume = (float(crypto_volume_json[total]["volume"])* float(crypto_json[total]["price"])))
             total += 1
             db.session.add(crypto)
             db.session.commit()
@@ -265,47 +268,57 @@ def redirect_home():
 
     return redirect('/cryptos')
 
+# @app.route('/test')
+# def test_volume():
+
+#     crypto_volume_request = requests.get(f'{BASE_URL}ticker/24hr')
+#     crypto_json = crypto_volume_request.json()
+#     print(crypto_json)
+#     return render_template('test.html')
+
+ROWS_PER_PAGE = 5
+
 @app.route('/cryptos')
 def show_home():
+    
+    # total = 0
 
-    total = 0
+    # crypto_request = requests.get(f'{BASE_URL}ticker/price')
+    # crypto_volume_request = requests.get(f'{BASE_URL}ticker/24hr')
+    # crypto_json = crypto_request.json()
+    # print(crypto_volume_request)
+    # for crypto in crypto_json:
+    #     try:
+    #         if crypto_json[total]["symbol"][-4:] == "USDT":
+    #             crypto_symbol = crypto_json[total]["symbol"]
 
-    crypto_request = requests.get(f'{BASE_URL}ticker/price')
-    crypto_json = crypto_request.json()
-
-    for crypto in crypto_json:
-        try:
-            if crypto_json[total]["symbol"][-4:] == "USDT":
-                crypto_symbol = crypto_json[total]["symbol"]
-
-                crypto_price = crypto_json[total]["price"]
+    #             crypto_price = crypto_json[total]["price"]
         
-                edit_crypto = Crypto.query.filter_by(name = crypto_symbol).first()
+    #             edit_crypto = Crypto.query.filter_by(name = crypto_symbol).first()
         
-                edit_crypto.price = crypto_price
-                total += 1
-                db.session.add(edit_crypto)
-                db.session.commit()
-
-
+    #             edit_crypto.price = crypto_price
+    #             total += 1
+    #             db.session.add(edit_crypto)
                 
-            else:
-                total += 1
-        except AttributeError:
-            print("uh oh. something happened")
+    #         else:
+    #             total += 1
+    #     except AttributeError:
+    #         print("uh oh. something happened")
 
     
 
     search = request.args.get('q')
-
+    searched = False
     if not search:
-        cryptos = Crypto.query.all()
+        page = request.args.get('page',1,type=int)
+        cryptos = Crypto.query.order_by(Crypto.volume.desc()).paginate(page = page, per_page=ROWS_PER_PAGE)
     else:
+        searched = True
         cryptos = Crypto.query.filter(Crypto.name.like(f"%{search.upper()}%")).all()
 
-    # db.session.commit()
+    db.session.commit()
        
-    return render_template('home.html',cryptos = cryptos)
+    return render_template('home.html',cryptos = cryptos, searched = searched)
     
 
 
