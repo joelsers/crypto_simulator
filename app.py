@@ -321,6 +321,7 @@ def show_home():
     return render_template('home.html',cryptos = cryptos, searched = searched)
     
 percent_change = 0
+user_positive = True
 
 @app.route('/user/<user_id>')
 def show_user(user_id):
@@ -369,7 +370,7 @@ def show_user(user_id):
     difference = value - user.USDT
     negative_difference = user.USDT - value
 
-    if difference > 0:
+    if difference >= 0:
         user_positive = True
         percent_change = difference/ (user.USDT * 100)
     elif difference < 0:
