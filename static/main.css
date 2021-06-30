@@ -1,27 +1,19 @@
 
-
-	.bg {
-		background-image: url("opacity_btc.jpg");
-		height: 100%;
-		background-attachment: fixed;
-		background-position: center;
-		background-repeat: no-repeat;
-		background-size: cover;
-	}
-	body,
-	html {
-		height: 100%;
-	}
-
-	.bg-image {
-		height: 100%;
-
-	}
-
-	.overlay-dark {
-		background: white;
-	}
+.bg {
+background-image: url("opacity_btc.jpg");
+height: 100%;
+background-attachment: fixed;
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;}body,html {
+height: 100%;}
+.bg-image {
+height: 100%;
+}
+.overlay-dark {
+background: white;}
 	
+
 
 
 

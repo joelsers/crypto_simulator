@@ -8,13 +8,13 @@
 <h1 class="display-1">{{crypto.name}}</h1>
 <div class="wrapper">
     {% if user_positive == True %}
-    <p id="price">Price : {{"{:.8f}".format(crypto.price)}} <span class="text-success">+{{ "%.3f%%" %
+    <p id="price">Price : {{"{:.8f}".format(crypto.price)}} <span class="badge bg-secondary bg-success">+{{
+            "%.3f%%" %
             (percent_change)}}</span></p>
     {% elif user_positive == False %}
-    <p id="price">Price : {{"{:.8f}".format(crypto.price)}} <span class="text-danger">-{{ "%.3f%%" %
+    <p id="price">Price : {{"{:.8f}".format(crypto.price)}} <span class="badge bg-secondary bg-danger">-{{ "%.3f%%" %
             (percent_change)}}</span></p>
     {% endif %}
-    <!-- <p id="price">Price : {{"{:.8f}".format(crypto.price)}}</p> -->
     <p id="price">Amount : {{"{:.8f}".format(crypto_amount)}}</p>
     <p id="price">USDT : {{"{:.8f}".format(USDT)}}</p>
 </div>

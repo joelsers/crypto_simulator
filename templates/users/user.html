@@ -9,28 +9,50 @@
 <h1 class="display-1">Username: {{user.username}}</h1>
 
 {% if user_positive == True %}
-<h2 class="display-6 text-success">Value: {{"{:.2f}".format(value)}} +{{ "%.3f%%" % (10000 * percent_change) }}</h2>
+<h2 class="display-6">Value: {{"{:.2f}".format(value)}} <span class="badge bg-secondary bg-success">+{{
+        "%.3f%%" %
+        (10000 * percent_change) }}</span></h2>
 {% elif user_positive == False %}
-<h2 class="display-6 text-danger">Value: {{"{:.2f}".format(value)}} -{{ "%.3f%%" % (10000 * percent_change) }}</h2>
+<h2 class="display-6">Value: {{"{:.2f}".format(value)}} <span class="badge bg-secondary bg-danger">-{{
+        "%.3f%%" % (10000 * percent_change) }}</span></h2>
 {% endif %}
+<div class="table-responsive ">
+    <table class="table table-hover text-light">
+        <thead>
+            <tr>
+                <th>Name:</th>
+                <th>Price:</th>
+                <th>Amount:</th>
+                <th>Value:</th>
+                <th>Actions:</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for crypto in users_cryptos %}
+            <tr>
+                <td>
+                    <p><a class="btn btn-primary" href="/cryptos/{{crypto.name}}">{{crypto.name}}</a></p>
+                </td>
+                <td>
+                    <p>{{"{:.8f}".format(crypto.price)}}</p>
+                </td>
+                <td>
+                    <p>{{"{:.8f}".format(crypto.amount)}}</p>
+                </td>
+                <td>
+                    <p>{{"{:.2f}".format(crypto.amount *
+                        crypto.price)}}</p>
+                </td>
+                <td><a class="btn btn-sm btn-success mb-3" href="/cryptos/{{crypto.name}}/buy">Buy!</a>
+                    <a class="btn btn-sm btn-danger mb-3" href="/cryptos/{{crypto.name}}/sell">Sell!</a>
+                </td>
+            </tr>
 
-<ul class="list-group">
-    {% for crypto in users_cryptos %}
-
-    <li class='user_cryptos'>
-        <p>Symbol : <a class="btn btn-primary" href="/cryptos/{{crypto.name}}">{{crypto.name}}</a></p>
 
 
-        <ul class="list-group">
-            <div class="wrapper">
-                <li id="price" class="pb-3">Price : {{"{:.8f}".format(crypto.price)}}</li>
-                <li id="price" class="pb-3">Amount : {{"{:.8f}".format(crypto.amount)}}</li>
-                <li id="price" class="pb-3">Value of {{crypto.name}}: {{"{:.2f}".format(crypto.amount * crypto.price)}}
-                </li>
-            </div>
-        </ul>
-    </li>
-    {% endfor %}
-</ul>
 
-{% endblock %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% endblock %}

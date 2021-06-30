@@ -276,7 +276,7 @@ def redirect_home():
 #     print(crypto_json)
 #     return render_template('test.html')
 
-ROWS_PER_PAGE = 5
+ROWS_PER_PAGE = 10
 
 @app.route('/cryptos')
 def show_home():

@@ -9,24 +9,34 @@
 
 
 <h1 class="display-1 text-center">All Cryptocurrencies</h1>
-
-<ul class="list-group">
+<div class="table-responsive ">
     {% if searched != True%}
-    {% for crypto in cryptos.items %}
-    <li class='cryptos'>
-        <p><b>Symbol : </b><a class="btn btn-primary" href="/cryptos/{{crypto.name}}">{{crypto.name}}</a></p>
-        <ul class="list-group">
-            <div class="wrapper">
-                <li id="price" class="pb-3"><b>Price : {{"{:.8f}".format(crypto.price)}}</b>
-                </li>
-                <li>
-                    <a class="btn btn-sm btn-success mb-3" href="/cryptos/{{crypto.name}}/buy">Buy!</a>
+    <table class="table table-hover text-light">
+        <thead>
+            <tr>
+                <th>Name:</th>
+                <th>Price:</th>
+                <th>Actions:</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for crypto in cryptos.items %}
+            <tr>
+                <td><a class="btn btn-primary" href="/cryptos/{{crypto.name}}">{{crypto.name}}</a></td>
+                <td>
+                    <p>Price : {{"{:.8f}".format(crypto.price)}}</p>
+                </td>
+                <td><a class="btn btn-sm btn-success mb-3" href="/cryptos/{{crypto.name}}/buy">Buy!</a>
                     <a class="btn btn-sm btn-danger mb-3" href="/cryptos/{{crypto.name}}/sell">Sell!</a>
-                </li>
-            </div>
-        </ul>
-    </li>
-    {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+
     <div class="text-right">
         <a href="{{ url_for('show_home', page=cryptos.prev_num) }}" class="btn btn-outline-light 
            {% if cryptos.page == 1 %}disabled{% endif %}">
@@ -57,22 +67,35 @@
     <p class="text-right mt-3">
         Showing page {{ cryptos.page }} of {{ cryptos.pages }}
     </p>
+
     {% else %}
-    {% for crypto in cryptos %}
-    <li class='cryptos'>
-        <p><b>Symbol : </b><a class="btn btn-primary" href="/cryptos/{{crypto.name}}">{{crypto.name}}</a></p>
-        <ul class="list-group">
-            <div class="wrapper">
-                <li id="price" class="pb-3"><b>Price : {{"{:.8f}".format(crypto.price)}}</b>
-                </li>
-                <li>
-                    <a class="btn btn-sm btn-success mb-3" href="/cryptos/{{crypto.name}}/buy">Buy!</a>
+    <table class="table table-hover text-light">
+        <thead>
+            <tr>
+                <th>Name:</th>
+                <th>Price:</th>
+                <th>Actions:</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for crypto in cryptos %}
+            <tr>
+                <td><a class="btn btn-primary" href="/cryptos/{{crypto.name}}">{{crypto.name}}</a></td>
+                <td>
+                    <p>Price : {{"{:.8f}".format(crypto.price)}}</p>
+                </td>
+                <td><a class="btn btn-sm btn-success mb-3" href="/cryptos/{{crypto.name}}/buy">Buy!</a>
                     <a class="btn btn-sm btn-danger mb-3" href="/cryptos/{{crypto.name}}/sell">Sell!</a>
-                </li>
-            </div>
-        </ul>
-    </li>
-    {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
     {% endif %}
-</ul>
+
+
+</div>
+
 {% endblock %}
