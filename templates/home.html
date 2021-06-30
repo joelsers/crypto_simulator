@@ -11,7 +11,7 @@
 <h1 class="display-1 text-center">All Cryptocurrencies</h1>
 <div class="table-responsive ">
     {% if searched != True%}
-    <table class="table table-hover text-light">
+    <table class="table text-light">
         <thead>
             <tr>
                 <th>Name:</th>
@@ -27,8 +27,8 @@
                 <td>
                     <p>Price : {{"{:.8f}".format(crypto.price)}}</p>
                 </td>
-                <td><a class="btn btn-sm btn-success mb-3" href="/cryptos/{{crypto.name}}/buy">Buy!</a>
-                    <a class="btn btn-sm btn-danger mb-3" href="/cryptos/{{crypto.name}}/sell">Sell!</a>
+                <td><a class="btn btn-success mb-1" href="/cryptos/{{crypto.name}}/buy">Buy!</a>
+                    <a class="btn btn-danger mb-1" href="/cryptos/{{crypto.name}}/sell">Sell!</a>
                 </td>
             </tr>
             {% endfor %}
@@ -69,7 +69,7 @@
     </p>
 
     {% else %}
-    <table class="table table-hover text-light">
+    <table class="table text-light">
         <thead>
             <tr>
                 <th>Name:</th>
@@ -85,8 +85,8 @@
                 <td>
                     <p>Price : {{"{:.8f}".format(crypto.price)}}</p>
                 </td>
-                <td><a class="btn btn-sm btn-success mb-3" href="/cryptos/{{crypto.name}}/buy">Buy!</a>
-                    <a class="btn btn-sm btn-danger mb-3" href="/cryptos/{{crypto.name}}/sell">Sell!</a>
+                <td><a class="btn btn-success mb-1" href="/cryptos/{{crypto.name}}/buy">Buy!</a>
+                    <a class="btn btn-danger mb-1" href="/cryptos/{{crypto.name}}/sell">Sell!</a>
                 </td>
             </tr>
             {% endfor %}
