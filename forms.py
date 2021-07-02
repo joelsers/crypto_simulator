@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, TextAreaField, FloatField
 from wtforms.validators import DataRequired, Email, Length, NumberRange
-
+from wtforms.fields.html5 import DecimalRangeField
 
 
 class UserAddForm(FlaskForm):
@@ -21,8 +21,8 @@ class LoginForm(FlaskForm):
 
 
 class BuyForm(FlaskForm):
-    amount = FloatField('Amount', validators=[DataRequired()])
+    amount = DecimalRangeField('Amount to buy', validators = [DataRequired()])
 
 class SellForm(FlaskForm):
-
-    amount = FloatField('Amount', validators=[DataRequired()])
+    amount = DecimalRangeField('Amount to sell', validators = [DataRequired()])
+    

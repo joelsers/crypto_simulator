@@ -18,7 +18,11 @@
       {% for error in field.errors %}
       <span class="text-danger">{{ error }}</span>
       {% endfor %}
-      {{ field(placeholder=field.label.text, class="form-control") }}
+      {{ sellform.amount.label }}:
+      {{ sellform.amount(class = "form-range", step=".00000001", value=0 , min=0, max=crypto_amount,
+      oninput="inputs.value=amount.value") }}
+      <input id="inputs" class="form-control" type="float" step=".00000001" value="0" min="0" max="{{crypto_amount}}"
+        oninput="amount.value = inputs.value" />
       {% endfor %}
 
       <button class="btn btn-danger btn-block btn-lg" class="pt-1">Sell!</button>

@@ -102,6 +102,8 @@ def buy_crypto_func(crypto_name, form):
     user_crypto = [crypto for crypto in user.crypto]
 
     crypto_names = [crypto.name for crypto in user_crypto]
+
+    
         
 
     for usdt in usdts:
@@ -113,16 +115,16 @@ def buy_crypto_func(crypto_name, form):
     if crypto_name == 'USDCUSDT':
         flash("You can't trade that directly", "danger")
         return False
-
-    if user_money.amount - (form.amount.data * crypto.price) > 1 and crypto.name not in crypto_names and form.amount.data > 0.00000000:
+    print(f'*********************************************{float(form.amount.data)}------------------------------------------------------')
+    if user_money.amount - (float(form.amount.data) * crypto.price) > 1 and crypto.name not in crypto_names and float(form.amount.data) > 0.00000000:
 
         bought_crypto = UserCrypto(
             name = crypto.name,
             price = crypto.price,
-            amount = form.amount.data,
+            amount = float(form.amount.data),
             user_crypto = g.user.id
             )
-                
+        
         db.session.add(bought_crypto)
         db.session.commit()
 
@@ -136,19 +138,20 @@ def buy_crypto_func(crypto_name, form):
 
         
 
-    elif user_money.amount - (form.amount.data * crypto.price) > 1 and crypto.name in crypto_names:
+    elif user_money.amount - (float(form.amount.data) * crypto.price) > 1 and crypto.name in crypto_names:
 
         bought_coin = crypto_names.index(crypto.name)
 
-        user.crypto[bought_coin].amount += form.amount.data
-        user_money.amount -= user.crypto[bought_coin].price * form.amount.data
-
+        user.crypto[bought_coin].amount += float(form.amount.data)
+        user_money.amount -= user.crypto[bought_coin].price * float(form.amount.data)
+        print(f'************************************{float(form.amount.data)}------------------------------------------------------')
         db.session.add(user)
         db.session.commit()
         return True
         
 
     else:
+        print(f'************************************{float(form.amount.data)}------------------------------------------------------')
         flash("You can't buy that much", "danger")
         return False
 
@@ -342,7 +345,7 @@ def show_user(user_id):
     crypto_volume_request = requests.get(f'{BASE_URL}ticker/24hr')
     crypto_volume_json = crypto_volume_request.json()
 
-    users_cryptos = [crypto for crypto in user.crypto if crypto.amount > 0]
+    users_cryptos = [crypto for crypto in user.crypto if crypto.amount > 0.000000009999999999999999]
     
     users_cryptos_names = [crypto.name for crypto in users_cryptos ]
     total = 0
@@ -358,10 +361,8 @@ def show_user(user_id):
             edit_crypto = UserCrypto.query.order_by(UserCrypto.price.desc()).filter_by(name = crypto_symbol).first()
             
             edit_crypto.price = crypto_price
-            if edit_crypto.price > crypto_open_price:
-                print(f'{crypto_symbol} {float(edit_crypto.price) - float(crypto_open_price)} ----------------------------------------')
-            else:
-                print("hmmbaba----------------------------------------------------------------------------------")
+            
+                
             db.session.add(edit_crypto)
             db.session.commit()
             
@@ -492,6 +493,8 @@ def buy_crypto(crypto_name):
 
     update_crypto_price(crypto_name)
 
+    form_max = (USDT- 5) / crypto.price
+
     buyform = BuyForm()
 
     if buyform.validate_on_submit():
@@ -502,7 +505,7 @@ def buy_crypto(crypto_name):
         else:
             return redirect(f'/cryptos/{crypto.name}/buy')
 
-    return render_template('crypto_buy.html', crypto = crypto, buyform = buyform, USDT = USDT, crypto_amount = crypto_amount)
+    return render_template('crypto_buy.html', crypto = crypto, buyform = buyform, USDT = USDT, crypto_amount = crypto_amount, form_max = form_max)
 
 
 @app.route('/cryptos/<crypto_name>/sell', methods = ['GET', 'POST'])
@@ -563,10 +566,10 @@ def sell_crypto(crypto_name):
             if crypto.name == user_crypto.name:
                 usdt = users_cryptos_names.index("USDCUSDT")
                 sold_coin = users_cryptos_names.index(crypto.name)
-
-                if sellform.amount.data <= user.crypto[sold_coin].amount and sellform.amount.data > 0.00000000:
-                    user.crypto[sold_coin].amount -= sellform.amount.data
-                    user.crypto[usdt].amount += user_crypto.price * sellform.amount.data
+                
+                if float(sellform.amount.data) <= user.crypto[sold_coin].amount and float(sellform.amount.data) > 0.00000000:
+                    user.crypto[sold_coin].amount -= float(sellform.amount.data)
+                    user.crypto[usdt].amount += user_crypto.price * float(sellform.amount.data)
 
                     db.session.add(user)
                     db.session.commit()
