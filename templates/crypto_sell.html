@@ -11,22 +11,25 @@
     <p id="price">Amount : {{"{:.8f}".format(crypto_amount)}}</p>
     <p id="price">USDT : {{"{:.8f}".format(USDT)}}</p>
 
-    <form method="POST" id="sell_form">
-      {{ sellform.hidden_tag() }}
 
-      {% for field in sellform if field.widget.input_type != 'hidden' %}
-      {% for error in field.errors %}
-      <span class="text-danger">{{ error }}</span>
-      {% endfor %}
-      {{ sellform.amount.label }}:
-      {{ sellform.amount(class = "form-range", step=".00000001", value=0 , min=0, max=crypto_amount,
-      oninput="inputs.value=amount.value") }}
-      <input id="inputs" class="form-control" type="float" step=".00000001" value="0" min="0" max="{{crypto_amount}}"
-        oninput="amount.value = inputs.value" />
-      {% endfor %}
+    <div class="container-fluid">
+      <form method="POST" id="sell_form">
+        {{ sellform.hidden_tag() }}
 
-      <button class="btn btn-danger btn-block btn-lg" class="pt-1">Sell!</button>
-    </form>
+        {% for field in sellform if field.widget.input_type != 'hidden' %}
+        {% for error in field.errors %}
+        <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        {{ sellform.amount.label }}:
+        {{ sellform.amount(class = "form-range", step=".00000001", value=0 , min=0, max=crypto_amount,
+        oninput="inputs.value=amount.value") }}
+        <input id="inputs" class="form-control" type="float" step=".00000001" value="0" min="0" max="{{crypto_amount}}"
+          oninput="amount.value = inputs.value" />
+        {% endfor %}
+
+        <button class="btn btn-danger btn-block btn-lg" class="pt-1">Sell!</button>
+      </form>
+    </div>
 
   </div>
 </div>
