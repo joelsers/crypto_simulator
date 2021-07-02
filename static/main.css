@@ -13,7 +13,12 @@ height: 100%;
 .overlay-dark {
 background: white;}
 	
+html, body {
+    overflow-x: hidden;
+    
+}
 
-
-
+body {
+    position: relative;
+}
 
