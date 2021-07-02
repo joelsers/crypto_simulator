@@ -23,10 +23,10 @@
         {% endfor %}
 
         {{ buyform.amount.label }}:
-        {{ buyform.amount(class = "form-range", step=".00000001",value=form_max/2 , min=0, max=form_max,
+        {{ buyform.amount(class = "form-range", step=".00000001", value=0 , min=0, max=form_max,
         oninput="inputs.value=amount.value") }}
-        <input id="inputs" class="form-control" type="float" step=".00000001" value="{{form_max/2}}" min="0"
-          max="{{ form_max }}" oninput="amount.value = inputs.value" />
+        <input id="inputs" class="form-control" type="float" step=".00000001" value="0" min="0" max="{{ form_max }}"
+          oninput="amount.value = inputs.value" />
         {% endfor %}
 
         <button class="btn btn-success btn-block btn-lg">Buy!</button>
