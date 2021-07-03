@@ -344,8 +344,8 @@ def show_user(user_id):
     crypto_request = requests.get(f'{BASE_URL}ticker/price')
     crypto_json = crypto_request.json()
     
-    # crypto_volume_request = requests.get(f'{BASE_URL}ticker/24hr')
-    # crypto_volume_json = crypto_volume_request.json()
+    crypto_volume_request = requests.get(f'{BASE_URL}ticker/24hr')
+    crypto_volume_json = crypto_volume_request.json()
 
     users_cryptos = [crypto for crypto in user.crypto if crypto.amount > 0.000000009999999999999999 and crypto.user_crypto == g.user.id]
     print(f'{users_cryptos} these are the users_cryptos---------------------*_*_*_*_*_*_*_**_')
@@ -359,28 +359,28 @@ def show_user(user_id):
     total = 0
     value = 0
 
-    for crypto_curr in users_cryptos_names:
-        update_user_crypto_price(crypto_curr, crypto_json)
+    # for crypto_curr in users_cryptos_names:
+    #     update_user_crypto_price(crypto_curr, crypto_json)
 
     
-    # for crypto in crypto_json:
+    for crypto in crypto_json:
         
-    #     crypto_symbol = crypto_json[total]["symbol"]
-    #     crypto_price = crypto_json[total]["price"]
-    #     # crypto_open_price = crypto_volume_json[total]["openPrice"]
-    #     if crypto_symbol in users_cryptos_names:
+        crypto_symbol = crypto_json[total]["symbol"]
+        crypto_price = crypto_json[total]["price"]
+        # crypto_open_price = crypto_volume_json[total]["openPrice"]
+        if crypto_symbol in users_cryptos_names:
+            print(f'{UserCrypto.query.filter_by(name = crypto_symbol, user_crypto = user.id).first()}-----------------------------------------')
+            edit_crypto = UserCrypto.query.filter_by(name = crypto_symbol, user_crypto = user.id).first()
             
-    #         edit_crypto = UserCrypto.query.filter_by(name = crypto_symbol).first()
-            
-    #         edit_crypto.price = crypto_price
+            edit_crypto.price = crypto_price
             
                 
-    #         db.session.add(edit_crypto)
-    #         db.session.commit()
+            db.session.add(edit_crypto)
+            db.session.commit()
             
-    #         total+=1
-    #     else:
-    #         total +=1
+            total+=1
+        else:
+            total +=1
 
     for crypto in users_cryptos:
         
