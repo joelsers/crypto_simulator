@@ -358,7 +358,7 @@ def show_user(user_id):
         crypto_open_price = crypto_volume_json[total]["openPrice"]
         if crypto_symbol in users_cryptos_names:
             
-            edit_crypto = UserCrypto.query.order_by(UserCrypto.price.desc()).filter_by(name = crypto_symbol).first()
+            edit_crypto = UserCrypto.query.filter_by(name = crypto_symbol).first()
             
             edit_crypto.price = crypto_price
             
