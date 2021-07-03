@@ -347,10 +347,10 @@ def show_user(user_id):
     # crypto_volume_request = requests.get(f'{BASE_URL}ticker/24hr')
     # crypto_volume_json = crypto_volume_request.json()
 
-    users_cryptos = [crypto for crypto in user.crypto if crypto.amount > 0.000000009999999999999999]
+    users_cryptos = [crypto for crypto in user.crypto if crypto.amount > 0.000000009999999999999999 and crypto.user_crypto == g.user.id]
     print(f'{users_cryptos} these are the users_cryptos---------------------*_*_*_*_*_*_*_**_')
 
-    user_cryps_ids = [crypto.id for crypto in users_cryptos]
+    user_cryps_ids = [crypto.user_crypto for crypto in users_cryptos]
 
     print(f'{user_cryps_ids}-*_*_*_*_*_*_*_*_*_-')
     
