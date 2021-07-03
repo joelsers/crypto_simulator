@@ -83,6 +83,7 @@ def update_user_crypto_price(crypto_name, crypto_json):
             if crypto_name == crypto_json[total]["symbol"]:
                 crypto.price = crypto_json[total]["price"]
                 total += 1
+                print(f'{crypto.name},{crypto.price}-----------------------------------------')
                 db.session.add(crypto)
                 db.session.commit()
             else:
@@ -347,6 +348,11 @@ def show_user(user_id):
     # crypto_volume_json = crypto_volume_request.json()
 
     users_cryptos = [crypto for crypto in user.crypto if crypto.amount > 0.000000009999999999999999]
+    print(f'{users_cryptos} these are the users_cryptos---------------------*_*_*_*_*_*_*_**_')
+
+    user_cryps_ids = [crypto.id for crypto in users_cryptos]
+
+    print(f'{user_cryps_ids}-*_*_*_*_*_*_*_*_*_-')
     
     users_cryptos_names = [crypto.name for crypto in users_cryptos ]
     print(f'{users_cryptos_names}--**************************************------------------------------------------------------------------------------------------------')
