@@ -16,6 +16,7 @@
 <h2 class="display-6">Value: {{"{:.2f}".format(value)}} <span class="badge bg-secondary bg-danger">-{{
         "%.3f%%" % (10000 * percent_change) }}</span></h2>
 {% endif %}
+<h2 class="display-6">USDT: {{"{:.2f}".format(USDT)}}</h2>
 <div class="table-responsive ">
     <table class="table text-light">
         <thead>
@@ -29,6 +30,7 @@
         </thead>
         <tbody>
             {% for crypto in users_cryptos %}
+            {% if crypto.name != "USDCUSDT" %}
             <tr>
                 <td>
                     <p><a class="btn btn-primary" href="/cryptos/{{crypto.name}}">{{crypto.name}}</a></p>
@@ -50,7 +52,7 @@
 
 
 
-
+            {% endif %}
             {% endfor %}
         </tbody>
     </table>

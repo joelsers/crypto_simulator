@@ -310,11 +310,12 @@ def show_user(user_id):
     crypto_volume_json = crypto_volume_request.json()
 
     users_cryptos = [crypto for crypto in user.crypto if crypto.amount > 0.000000009999999999999999 and crypto.user_crypto == g.user.id]
-
+    print(users_cryptos)
     users_cryptos_names = [crypto.name for crypto in users_cryptos ]
-    
+    print(users_cryptos_names)
     total = 0
     value = 0
+
 
     
     for crypto in crypto_json:
@@ -339,6 +340,8 @@ def show_user(user_id):
     for crypto in users_cryptos:
         
         value += crypto.price * crypto.amount
+        if crypto.name == "USDCUSDT":
+            user_usdt = crypto
 
     percent_change = 0
 
@@ -357,7 +360,7 @@ def show_user(user_id):
         flash("Access unauthorized.", "danger")
         return redirect("/login")
     else:
-        return render_template('users/user.html', user=user, users_cryptos=users_cryptos, value = value, user_positive = user_positive, percent_change = percent_change)
+        return render_template('users/user.html', user=user, users_cryptos=users_cryptos, value = value, user_positive = user_positive, percent_change = percent_change, USDT = user_usdt.amount )
 
 
 

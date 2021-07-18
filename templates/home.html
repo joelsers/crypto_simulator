@@ -22,6 +22,7 @@
         <tbody>
 
             {% for crypto in cryptos.items %}
+            {% if crypto.name != "USDCUSDT" %}
             <tr>
                 <td><a class="btn btn-primary" href="/cryptos/{{crypto.name}}">{{crypto.name}}</a></td>
                 <td>
@@ -31,6 +32,7 @@
                     <a class="btn btn-danger mb-1" href="/cryptos/{{crypto.name}}/sell">Sell!</a>
                 </td>
             </tr>
+            {% endif %}
             {% endfor %}
         </tbody>
     </table>
@@ -80,6 +82,7 @@
         <tbody>
 
             {% for crypto in cryptos %}
+            {% if crypto.name != "USDCUSDT" %}
             <tr>
                 <td><a class="btn btn-primary" href="/cryptos/{{crypto.name}}">{{crypto.name}}</a></td>
                 <td>
@@ -89,6 +92,7 @@
                     <a class="btn btn-danger mb-1" href="/cryptos/{{crypto.name}}/sell">Sell!</a>
                 </td>
             </tr>
+            {% endif %}
             {% endfor %}
         </tbody>
     </table>
