@@ -4,25 +4,25 @@
 
 {% block content %}
 
-  <div class="row justify-content-md-center">
-    <div class="col-md-7 col-lg-5">
-      <h2 class="display-1 text-center">Welcome back.</h2>
+<div class="row justify-content-md-center">
+  <div class="col-md-7 col-lg-5">
+    <h2 class="display-1 text-center">Welcome back.</h2>
 
 
-      <form method="POST" id="user_form">
-        {{ form.hidden_tag() }}
+    <form method="POST" id="user_form">
+      {{ form.hidden_tag() }}
 
-        {% for field in form if field.widget.input_type != 'hidden' %}
-          {% for error in field.errors %}
-            <span class="text-danger">{{ error }}</span>
-          {% endfor %}
-          {{ field(placeholder=field.label.text, class="form-control") }}
-        {% endfor %}
+      {% for field in form if field.widget.input_type != 'hidden' %}
+      {% for error in field.errors %}
+      <span class="text-danger">{{ error }}</span>
+      {% endfor %}
+      {{ field(placeholder=field.label.text, class="form-control mb-4") }}
+      {% endfor %}
 
-        <button class="btn btn-primary btn-block btn-lg mb-2">Log in</button>
-      </form>
-      <a class ="btn btn-success" href="/signup">Sign Up</a>
-    </div>
+      <button class="btn btn-primary btn-block btn-lg mb-2">Log in</button>
+    </form>
+    <a class="btn btn-success" href="/signup">Sign Up</a>
   </div>
+</div>
 
 {% endblock %}
