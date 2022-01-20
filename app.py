@@ -263,6 +263,47 @@ def page_not_found(e):
     
     return render_template('404.html')
 
+@app.route('/refresh')
+def refresh_cryptos():
+
+    total = 0
+
+    crypto_request = requests.get(f'{BASE_URL}ticker/price')
+    
+    crypto_json = crypto_request.json()
+    print(crypto_json)
+    # crypto_volume_request = requests.get(f'{BASE_URL}ticker/24hr')
+    
+    # crypto_volume_json = crypto_volume_request.json()
+
+    crypto = Crypto.query.all()
+
+    print(len(crypto))
+    print(len(crypto_json))
+    print(f'{crypto[0].price}-----------------------------------------------------------------------------------------------------------')
+
+
+    crypto_name = [name for name in crypto_json if crypto_json["symbol"][-4:] == "USDT"]
+    print(crypto_name)
+    cryptos = [crypto_currency for crypto_currency in crypto]
+    print(cryptos)
+        
+
+    # for crypto_currency in crypto_json:
+        
+    #         if crypto_json[total]["symbol"][-4:] == "USDT":
+    #             crypto[total].price = crypto_json[total]["price"]
+    #             # print(f'{crypto[total].price}--------------------------------------------------------------------------------------')
+    #             # print(f'{crypto_json[total]["price"]}--------------------------------------------------------------------------------')
+    #             total += 1
+    #             print(f'{total}------------------------------------------------------------------------------------')
+    #             db.session.add(crypto[total])
+    #             db.session.commit()
+    #         else:
+    #             total +=1
+
+    return redirect('/cryptos')
+
 @app.route('/')
 def redirect_home():
 
@@ -328,7 +369,7 @@ def show_user(user_id):
             edit_crypto = UserCrypto.query.filter_by(name = crypto_symbol, user_crypto = user.id).first()
             
             edit_crypto.price = crypto_price
-            
+            print(edit_crypto)
                 
             db.session.add(edit_crypto)
             db.session.commit()
