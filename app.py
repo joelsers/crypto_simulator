@@ -265,28 +265,58 @@ def page_not_found(e):
 
 @app.route('/refresh')
 def refresh_cryptos():
+    # seed_cryptos()
 
     total = 0
 
     crypto_request = requests.get(f'{BASE_URL}ticker/price')
-    
     crypto_json = crypto_request.json()
-    print(crypto_json)
-    # crypto_volume_request = requests.get(f'{BASE_URL}ticker/24hr')
+
+    for x in crypto_json:
+        try:
+            if crypto_json[total]["symbol"][-4:] == "USDT":
+                crypto_symbol = crypto_json[total]["symbol"]
+
+                crypto_price = crypto_json[total]["price"]
+
+                edit_crypto = Crypto.query.filter_by(name = crypto_symbol).first()
+                print(f'{edit_crypto}---------------------------------------------------------------------------')
+                print(f'{edit_crypto.name}---------------------------------------------------------------------------')
+                print(f'{edit_crypto.price}---------------------------------------------------------------------------')
+                edit_crypto.price = crypto_price
+                
+                print(total)
+                db.session.add(edit_crypto)
+                db.session.commit()
+            
+            total += 1
+            print(f'{total}-----------------------------------------------------------------------------------------')
+        except AttributeError:
+            print("indexing error?")
+
+
+    cryptos = Crypto.query.all()
+    # total = 0
+
+    # crypto_request = requests.get(f'{BASE_URL}ticker/price')
     
-    # crypto_volume_json = crypto_volume_request.json()
+    # crypto_json = crypto_request.json()
+    # print(crypto_json)
+    # # crypto_volume_request = requests.get(f'{BASE_URL}ticker/24hr')
+    
+    # # crypto_volume_json = crypto_volume_request.json()
 
-    crypto = Crypto.query.all()
+    # crypto = Crypto.query.all()
 
-    print(len(crypto))
-    print(len(crypto_json))
-    print(f'{crypto[0].price}-----------------------------------------------------------------------------------------------------------')
+    # print(len(crypto))
+    # print(len(crypto_json))
+    # print(f'{crypto[0].price}-----------------------------------------------------------------------------------------------------------')
 
 
-    crypto_name = [name for name in crypto_json if crypto_json["symbol"][-4:] == "USDT"]
-    print(crypto_name)
-    cryptos = [crypto_currency for crypto_currency in crypto]
-    print(cryptos)
+    # crypto_name = [name for name in crypto_json if crypto_json["symbol"][-4:] == "USDT"]
+    # print(crypto_name)
+    # cryptos = [crypto_currency for crypto_currency in crypto]
+    # print(cryptos)
         
 
     # for crypto_currency in crypto_json:
