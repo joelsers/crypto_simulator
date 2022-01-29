@@ -632,7 +632,7 @@ def test_api():
 def get_all_cryptos():
 
     cryptos = [crypto.serialize() for crypto in Crypto.query.all()]
-
+    
     return jsonify(cryptos = cryptos)
 
 
@@ -717,7 +717,6 @@ def buy_crypto_api(crypto_name):
         return (response, 201)
     
     else:
-
         return jsonify('{error}')
 
     
