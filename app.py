@@ -327,14 +327,13 @@ def show_home():
         cryptos = Crypto.query.order_by(Crypto.volume.desc()).paginate(
             page=page, per_page=ROWS_PER_PAGE
         )
-        print(f"hey joel look at cryptos **************___*_*_*_*_*_*_*{cryptos}")
+
     else:
         searched = True
         page = request.args.get("page", 1, type=int)
         cryptos = Crypto.query.filter(Crypto.name.like(f"%{search.upper()}%")).paginate(
             page=page, per_page=ROWS_PER_PAGE
         )
-        print(f"hey joel look at cryptos **************___*_*_*_*_*_*_*_{cryptos}")
 
     db.session.commit()
 
