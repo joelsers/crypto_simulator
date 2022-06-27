@@ -2,7 +2,6 @@ from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 
 
-
 bcrypt = Bcrypt()
 
 db = SQLAlchemy()
@@ -17,29 +16,15 @@ def connect_db(app):
 class User(db.Model):
     """User in the system."""
 
-    __tablename__ = 'users'
+    __tablename__ = "users"
 
-    id = db.Column(
-        db.Integer,
-        primary_key=True
-    )
+    id = db.Column(db.Integer, primary_key=True)
 
-    email = db.Column(
-        db.Text,
-        nullable=False,
-        unique=True
-    )
+    email = db.Column(db.Text, nullable=False, unique=True)
 
-    username = db.Column(
-        db.Text,
-        nullable=False,
-        unique=True
-    )
+    username = db.Column(db.Text, nullable=False, unique=True)
 
-    password = db.Column(
-        db.Text,
-        nullable=False
-    )
+    password = db.Column(db.Text, nullable=False)
 
     USDT = db.Column(
         db.Float,
@@ -49,8 +34,6 @@ class User(db.Model):
 
     crypto = db.relationship("UserCrypto", backref="user", cascade="all, delete-orphan")
 
-    
-
     @classmethod
     def signup(cls, username, email, password, USDT):
         """Sign up user.
@@ -58,14 +41,9 @@ class User(db.Model):
         Hashes password and adds user to system.
         """
 
-        hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
+        hashed_pwd = bcrypt.generate_password_hash(password).decode("UTF-8")
 
-        user = User(
-            username=username,
-            email=email,
-            password=hashed_pwd,
-            USDT = USDT
-        )
+        user = User(username=username, email=email, password=hashed_pwd, USDT=USDT)
 
         db.session.add(user)
         return user
@@ -93,70 +71,50 @@ class User(db.Model):
 class Crypto(db.Model):
     """An individual crypto ("warble")."""
 
-    __tablename__ = 'cryptos'
+    __tablename__ = "cryptos"
 
-    id = db.Column(
-        db.Integer,
-        primary_key=True
-    )
+    id = db.Column(db.Integer, primary_key=True)
 
-    name = db.Column(
-        db.String(140),
-        nullable=False,
-        unique = True
-    )
+    name = db.Column(db.String(140), nullable=False, unique=True)
 
     price = db.Column(
         db.Float,
         nullable=False,
     )
 
-    volume = db.Column(
-        db.Float,
-        nullable = False
-    )
+    volume = db.Column(db.Float, nullable=False)
 
     def serialize(self):
         return {
-            'id': self.id,
-            'name':self.name,
-            'price':self.price
-            # 'volume':self.volume
+            "id": self.id,
+            "name": self.name,
+            "price": self.price,
+            "volume": self.volume,
         }
 
-    
 
 class UserCrypto(db.Model):
 
-    __tablename__ = 'users_crypto'
+    __tablename__ = "users_crypto"
 
-    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
-    name = db.Column(
-        db.String(140),
-        nullable=False,
-        unique = False
-    )
+    name = db.Column(db.String(140), nullable=False, unique=False)
 
     price = db.Column(
         db.Float,
         nullable=False,
     )
 
-    amount = db.Column(db.Float, nullable = False)
+    amount = db.Column(db.Float, nullable=False)
 
-    user_crypto = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_crypto = db.Column(db.Integer, db.ForeignKey("users.id"))
 
     def serialize(self):
         return {
-            'id': self.id,
-            'name':self.name,
-            'price':self.price,
-            'amount': self.amount,
-            'user-id':self.user_crypto
+            "id": self.id,
+            "name": self.name,
+            "price": self.price,
+            "amount": self.amount,
+            "user-id": self.user_crypto,
         }
-
-
-
-
-

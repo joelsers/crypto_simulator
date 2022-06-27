@@ -81,7 +81,7 @@
         </thead>
         <tbody>
 
-            {% for crypto in cryptos %}
+            {% for crypto in cryptos.items %}
             {% if crypto.name != "USDCUSDT" %}
             <tr>
                 <td><a class="btn btn-primary" href="/cryptos/{{crypto.name}}">{{crypto.name}}</a></td>
@@ -96,6 +96,37 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <div class="text-right">
+        <a href="{{ url_for('show_home', page=cryptos.prev_num) }}" class="btn btn-outline-light 
+           {% if cryptos.page == 1 %}disabled{% endif %}">
+            &laquo;
+        </a>
+        <!-- Loop through the number of pages to display a link for each-->
+        {% for page_num in cryptos.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+        <!-- Check for the active page and set the link to "Active"-->
+        {% if cryptos.page == page_num %}
+        <a href="{{ url_for('show_home', page=page_num) }}" class="btn btn-dark">
+            {{ page_num }}
+        </a>
+        {% else %}
+        <a href="{{ url_for('show_home', page=page_num) }}" class="btn btn-outline-light ">
+            {{ page_num }}
+        </a>
+        {% endif %}
+        {% else %}
+        ...
+        {% endif %}
+        {% endfor %}
+        <a href="{{ url_for('show_home', page=cryptos.next_num) }}" class="btn btn-outline-light
+           {% if cryptos.page == cryptos.pages %}disabled{% endif %}">
+            &raquo;
+        </a>
+    </div>
+    <p class="text-right mt-3">
+        Showing page {{ cryptos.page }} of {{ cryptos.pages }}
+    </p>
 
     {% endif %}
 
