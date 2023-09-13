@@ -31,15 +31,13 @@ toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
 
-BASE_URL = "https://api1.binance.com/api/v3/"
-
+BASE_URL = "https://api.binance.us/api/v3/"
 
 def seed_cryptos():
     total = 0
 
     crypto_request = requests.get(f"{BASE_URL}ticker/price")
     crypto_json = crypto_request.json()
-
     crypto_volume_request = requests.get(f"{BASE_URL}ticker/24hr")
     crypto_volume_json = crypto_volume_request.json()
 
@@ -373,9 +371,9 @@ def show_user(user_id):
     print(users_cryptos_names)
     total = 0
     value = 0
-
+    print(f"crypto json here {crypto_json}")
     for crypto in crypto_json:
-
+        print(f"crypto here {crypto}")
         crypto_symbol = crypto_json[total]["symbol"]
         crypto_price = crypto_json[total]["price"]
         # crypto_open_price = crypto_volume_json[total]["openPrice"]
