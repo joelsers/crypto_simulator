@@ -161,7 +161,11 @@ def buy_crypto_func(crypto_name, form):
     else:
         flash("You can't buy that much", "danger")
         return False
-
+    
+@app.route("/init-db")
+def init_db():
+    db.create_all()
+    return "Tables created"
 
 @app.before_request
 def add_user_to_g():
